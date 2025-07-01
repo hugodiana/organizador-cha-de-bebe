@@ -1,4 +1,4 @@
-# Arquivo: backend/app/__init__.py (Versão Corrigida Final)
+# Arquivo: backend/app/__init__.py (Versão Final e Robusta)
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -10,8 +10,7 @@ from config import Config
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
-# A instância do CORS é criada aqui, mas será configurada depois
-cors = CORS() 
+# Não precisamos mais do 'cors = CORS()' aqui
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -28,21 +27,19 @@ def create_app(config_class=Config):
 
     # Importa o blueprint das rotas
     from app.routes import api as api_blueprint
-    app.register_blueprint(api_blueprint, url_prefix='/api')
 
     # --- CORREÇÃO ESTÁ AQUI ---
-    # Aplicamos a configuração do CORS diretamente no 'api_blueprint'
-    # depois que ele foi criado e registrado. Isso é mais robusto.
-    cors.init_app(
-        app, 
-        resources={r"/api/*": {
-            "origins": [
-                "http://localhost:5173", 
-                "https://organizador-cha-de-bebe.vercel.app"
-            ]
-        }}, 
-        supports_credentials=True
+    # Aplicamos o CORS diretamente ao blueprint antes de registrá-lo.
+    # Isso garante que todas as rotas em /api recebam as regras de CORS.
+    CORS(api_blueprint, 
+         supports_credentials=True, 
+         origins=[
+            "http://localhost:5173", 
+            "https://organizador-cha-de-bebe.vercel.app"
+         ]
     )
+
+    app.register_blueprint(api_blueprint, url_prefix='/api')
     # -------------------------
 
     with app.app_context():
