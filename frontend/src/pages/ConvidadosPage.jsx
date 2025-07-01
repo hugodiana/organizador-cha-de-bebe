@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import apiClient from '../api/apiClient';
 import Modal from '../components/Modal';
 import toast from 'react-hot-toast';
@@ -10,6 +10,7 @@ function ConvidadosPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [convidadoPrincipalAtual, setConvidadoPrincipalAtual] = useState(null);
   const [novoMembroNome, setNovoMembroNome] = useState('');
+  const [termoBusca, setTermoBusca] = useState('');
 
   const fetchConvidados = () => {
     apiClient.get('/convidados')
@@ -63,7 +64,7 @@ function ConvidadosPage() {
         nome: novoMembroNome, 
         convidado_principal_id: convidadoPrincipalAtual.id 
       });
-      toast.success(`"${novoMembroNome}" foi adicionado à família!`)
+      toast.success(`"${novoMembroNome}" foi adicionado à família!`);
       fetchConvidados();
       setIsModalOpen(false);
     } catch (error) {
@@ -72,7 +73,18 @@ function ConvidadosPage() {
     }
   };
 
-  const totalPessoas = convidados.reduce((acc, grupo) => acc + 1 + grupo.familia.length, 0);
+  const convidadosFiltrados = useMemo(() => {
+    if (!termoBusca.trim()) {
+      return convidados;
+    }
+    const busca = termoBusca.toLowerCase();
+    return convidados.filter(grupo => 
+      grupo.nome.toLowerCase().includes(busca) ||
+      grupo.familia.some(familiar => familiar.nome.toLowerCase().includes(busca))
+    );
+  }, [convidados, termoBusca]);
+
+  const totalPessoas = convidadosFiltrados.reduce((acc, grupo) => acc + 1 + grupo.familia.length, 0);
 
   if (loading) return <div>Carregando lista de convidados...</div>;
 
@@ -80,7 +92,7 @@ function ConvidadosPage() {
     <div className="convidados-container">
       <h2>Lista de Convidados</h2>
       <div className="orcamento-status">
-        Total de Pessoas na Lista: <strong>{totalPessoas}</strong>
+        Exibindo: <strong>{totalPessoas}</strong> pessoas
       </div>
 
       <div className="form-container">
@@ -93,33 +105,47 @@ function ConvidadosPage() {
 
       <div className="convidados-list">
         <h3>Convidados</h3>
-        <ul>
-          {convidados.map(grupo => (
-            <li key={grupo.id}>
-              <div className="convidado-info">
-                <strong>{grupo.nome}</strong>
-                {grupo.familia.length > 0 && <span> (+ {grupo.familia.map(f => f.nome).join(', ')})</span>}
-              </div>
-              <div className="convidado-actions">
-                <button onClick={() => handleAbrirModalMembro(grupo)} className="add-family-btn">Add Membro</button>
-                <button onClick={() => handleRemoverGrupo(grupo.id)} className="remove-btn">×</button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <div className="filter-container">
+          <input
+            type="text"
+            placeholder="Buscar por nome..."
+            value={termoBusca}
+            onChange={e => setTermoBusca(e.target.value)}
+          />
+        </div>
+
+        {convidados.length > 0 && convidadosFiltrados.length === 0 ? (
+            <div className="empty-state">
+                <h3>Nenhum convidado encontrado</h3>
+                <p>Tente ajustar os termos da sua busca.</p>
+            </div>
+        ) : convidados.length === 0 ? (
+            <div className="empty-state">
+                <h3>Sua Lista de Convidados está Vazia</h3>
+                <p>Use o formulário acima para começar a adicionar seus convidados.</p>
+            </div>
+        ) : (
+            <ul>
+              {convidadosFiltrados.map(grupo => (
+                <li key={grupo.id}>
+                  <div className="convidado-info">
+                    <strong>{grupo.nome}</strong>
+                    {grupo.familia.length > 0 && <span> (+ {grupo.familia.map(f => f.nome).join(', ')})</span>}
+                  </div>
+                  <div className="convidado-actions">
+                    <button onClick={() => handleAbrirModalMembro(grupo)} className="add-family-btn">Add Membro</button>
+                    <button onClick={() => handleRemoverGrupo(grupo.id)} className="remove-btn">×</button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+        )}
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <form onSubmit={handleSalvarMembro}>
           <h3>Adicionar Familiar a "{convidadoPrincipalAtual?.nome}"</h3>
-          <input 
-            type="text" 
-            value={novoMembroNome}
-            onChange={(e) => setNovoMembroNome(e.target.value)}
-            placeholder="Nome do membro da família"
-            required
-            autoFocus
-          />
+          <input type="text" value={novoMembroNome} onChange={(e) => setNovoMembroNome(e.target.value)} placeholder="Nome do membro da família" required autoFocus />
           <button type="submit">Salvar Familiar</button>
         </form>
       </Modal>

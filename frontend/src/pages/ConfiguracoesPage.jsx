@@ -1,23 +1,31 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../api/apiClient';
+import toast from 'react-hot-toast'; // Importando o toast
 
 function ConfiguracoesPage() {
   const [bebes, setBebes] = useState([]);
   const [dataCha, setDataCha] = useState('');
+  const [localCha, setLocalCha] = useState(''); // Estado para o local do chá
   const [semDataDefinida, setSemDataDefinida] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Busca as configurações atuais quando a página carrega
     apiClient.get('/configuracoes')
       .then(response => {
-        const { bebes, data_cha } = response.data;
+        const { bebes, data_cha, local_cha } = response.data;
         setBebes(bebes.length > 0 ? bebes : [{ nome: '', sexo: 'NaoInformado' }]);
         setDataCha(data_cha || '');
+        setLocalCha(local_cha || ''); // CORREÇÃO: Carrega o local salvo no estado
         if (!data_cha) setSemDataDefinida(true);
       })
-      .catch(error => console.error("Erro ao buscar configurações", error))
+      .catch(error => {
+        console.error("Erro ao buscar configurações", error);
+        toast.error("Não foi possível carregar suas configurações.");
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -27,39 +35,40 @@ function ConfiguracoesPage() {
     setBebes(novosBebes);
   };
 
-  // --- NOVA FUNÇÃO PARA REMOVER UM BEBÊ ---
   const handleRemoverBebe = async (idParaRemover) => {
-    // Impede que o último bebê seja removido
     if (bebes.length <= 1) {
-      alert("Você não pode remover o único registro de bebê.");
+      toast.error("Você não pode remover o único registro de bebê.");
       return;
     }
     if (window.confirm("Tem certeza que deseja remover este registro?")) {
         try {
             await apiClient.delete(`/bebes/${idParaRemover}`);
-            // Atualiza a lista na tela removendo o bebê apagado
             setBebes(bebes.filter(b => b.id !== idParaRemover));
-            alert("Registro do bebê removido com sucesso!");
+            toast.success("Registro do bebê removido!");
         } catch (error) {
             console.error("Erro ao remover bebê:", error);
-            alert("Não foi possível remover o registro.");
+            toast.error("Não foi possível remover o registro.");
         }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const payload = {
         bebes,
-        data_cha: semDataDefinida ? '' : dataCha
+        data_cha: semDataDefinida ? '' : dataCha,
+        local_cha: localCha // CORREÇÃO: Vírgula adicionada na linha anterior
       };
       await apiClient.put('/configuracoes', payload);
-      alert('Configurações salvas com sucesso!');
+      toast.success('Configurações salvas com sucesso!');
       navigate('/dashboard');
     } catch (err) {
-      alert('Ocorreu um erro ao salvar. Tente novamente.');
+      toast.error('Ocorreu um erro ao salvar. Tente novamente.');
       console.error(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -68,7 +77,7 @@ function ConfiguracoesPage() {
   return (
     <form onSubmit={handleSubmit} className="config-container">
       <h2>Configurações do Chá</h2>
-
+      
       {bebes.map((bebe, index) => (
         <div key={bebe.id || index} className="bebe-form-group">
           <div className="bebe-inputs">
@@ -80,8 +89,6 @@ function ConfiguracoesPage() {
               <option value="Menina">Menina</option>
             </select>
           </div>
-          {/* --- BOTÃO DE REMOVER ADICIONADO AQUI --- */}
-          {/* Só aparece se houver mais de um bebê */}
           {bebes.length > 1 && (
             <button type="button" onClick={() => handleRemoverBebe(bebe.id)} className="remove-btn">×</button>
           )}
@@ -95,7 +102,18 @@ function ConfiguracoesPage() {
         <label htmlFor="semData">Ainda não decidi a data</label>
       </div>
 
-      <button type="submit">Salvar Alterações</button>
+      {/* CORREÇÃO: Adicionado o campo para o Local do Chá */}
+      <h4>Local do Chá</h4>
+      <input 
+        type="text" 
+        value={localCha} 
+        onChange={e => setLocalCha(e.target.value)} 
+        placeholder="Ex: Salão de festas do condomínio" 
+      />
+
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Salvando...' : 'Salvar Alterações'}
+      </button>
     </form>
   );
 }

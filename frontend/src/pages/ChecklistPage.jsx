@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import apiClient from '../api/apiClient';
+import toast from 'react-hot-toast';
 
 function ChecklistPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [novaTarefa, setNovaTarefa] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     apiClient.get('/checklist')
@@ -16,13 +18,18 @@ function ChecklistPage() {
   const handleAdicionar = async (e) => {
     e.preventDefault();
     if (!novaTarefa.trim()) return;
+
+    setIsSubmitting(true);
     try {
       const response = await apiClient.post('/checklist', { tarefa: novaTarefa });
       setItems([...items, response.data]);
+      toast.success("Tarefa adicionada!");
       setNovaTarefa('');
     } catch (error) {
       console.error("Erro ao adicionar tarefa:", error);
-      alert("Não foi possível adicionar a tarefa.");
+      toast.error("Não foi possível adicionar a tarefa.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -32,7 +39,7 @@ function ChecklistPage() {
       setItems(items.map(item => item.id === id ? { ...item, concluido: !concluido } : item));
     } catch (error) {
       console.error("Erro ao marcar tarefa:", error);
-      alert("Não foi possível atualizar a tarefa.");
+      toast.error("Não foi possível atualizar a tarefa.");
     }
   };
 
@@ -41,9 +48,10 @@ function ChecklistPage() {
       try {
         await apiClient.delete(`/checklist/${id}`);
         setItems(items.filter(item => item.id !== id));
+        toast.success("Tarefa removida.");
       } catch (error) {
         console.error("Erro ao remover tarefa:", error);
-        alert("Não foi possível remover a tarefa.");
+        toast.error("Não foi possível remover a tarefa.");
       }
     }
   };
@@ -67,26 +75,36 @@ function ChecklistPage() {
             type="text"
             value={novaTarefa}
             onChange={(e) => setNovaTarefa(e.target.value)}
-            placeholder="Ex: Enviar convites"
+            placeholder="Ex: Contratar fotógrafo"
             required
           />
-          <button type="submit">Adicionar Tarefa</button>
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Adicionando...' : 'Adicionar Tarefa'}
+          </button>
         </form>
       </div>
 
-      <ul className="checklist">
-        {items.map(item => (
-          <li key={item.id} className={item.concluido ? 'concluido' : ''}>
-            <input
-              type="checkbox"
-              checked={item.concluido}
-              onChange={() => handleMarcar(item.id, item.concluido)}
-            />
-            <span>{item.tarefa}</span>
-            <button onClick={() => handleRemover(item.id)} className="remove-btn">×</button>
-          </li>
-        ))}
-      </ul>
+      {/* --- LÓGICA DO ESTADO VAZIO ADICIONADA AQUI --- */}
+      {items.length > 0 ? (
+        <ul className="checklist">
+          {items.map(item => (
+            <li key={item.id} className={item.concluido ? 'concluido' : ''}>
+              <input
+                type="checkbox"
+                checked={item.concluido}
+                onChange={() => handleMarcar(item.id, item.concluido)}
+              />
+              <span>{item.tarefa}</span>
+              <button onClick={() => handleRemover(item.id)} className="remove-btn">×</button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="empty-state">
+          <h3>Seu Checklist está Vazio</h3>
+          <p>Adicione sua primeira tarefa para começar a se organizar.</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,13 +1,13 @@
-/* Arquivo: frontend/src/App.css */
+/* Arquivo: frontend/src/App.css (Versão Final e Organizada) */
 
-/* === Layout Principal === */
+/* === 1. LAYOUT PRINCIPAL E TÍTULOS === */
 .App {
   max-width: 950px;
   margin: 40px auto;
   padding: 20px 40px;
   background-color: var(--cor-branco);
   border-radius: 16px;
-  box-shadow: var(--sombra-card);
+  box-shadow: var(--sombra-suave);
 }
 
 .content {
@@ -15,22 +15,27 @@
 }
 
 h1, h2, h3 {
-  color: #4a4a4a;
   text-align: center;
-  font-weight: 600;
+  font-weight: 700;
+  color: #4a4a4a;
 }
+
 h2 {
-  border-bottom: 2px solid var(--cor-primaria);
+  color: var(--cor-primaria);
+  border-bottom: 2px solid var(--cor-secundaria);
   padding-bottom: 10px;
   margin-bottom: 30px;
 }
+
 h3 {
-  color: var(--cor-texto-claro);
+  color: var(--cor-texto-secundario);
   margin-top: 30px;
+  margin-bottom: 15px;
   text-align: left;
+  font-weight: 600;
 }
 
-/* === Barra de Navegação (Navbar) === */
+/* === 2. BARRA DE NAVEGAÇÃO (NAVBAR) === */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -44,15 +49,15 @@ h3 {
 }
 .navbar a {
   text-decoration: none;
-  color: var(--cor-texto);
-  font-weight: 500;
+  color: var(--cor-texto-secundario);
+  font-weight: 600;
   padding: 8px 15px;
   border-radius: 8px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 .navbar a:hover {
-  background-color: #e8eaf6;
-  color: #3f51b5;
+  background-color: #f0f4ff;
+  color: #6a8dff;
 }
 .nav-auth {
   display: flex;
@@ -61,30 +66,39 @@ h3 {
 }
 .nav-auth span {
   font-weight: bold;
+  color: var(--cor-texto-principal);
 }
 .nav-auth button {
-    background-color: #f1f1f1;
+  background-color: #fde2e2;
+  color: var(--cor-erro);
+  border: none;
+  font-weight: 600;
+}
+.nav-auth button:hover {
+  background-color: var(--cor-erro);
+  color: var(--cor-branco);
 }
 
-/* === Formulários e Botões === */
+/* === 3. FORMULÁRIOS E BOTÕES === */
 form {
   display: flex;
   flex-direction: column;
   gap: 15px;
   margin-top: 20px;
   padding: 25px;
-  background-color: #fdfdff;
-  border: 1px solid #eee;
+  background-color: #fafbff;
+  border: var(--borda-suave);
   border-radius: 8px;
 }
 form input, form select {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ccc;
+  border: var(--borda-suave);
   border-radius: 8px;
   font-size: 1rem;
+  font-family: 'Nunito', sans-serif;
 }
-form button, .submit-btn {
+form button[type="submit"] {
   padding: 12px 20px;
   border: none;
   background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
@@ -96,34 +110,58 @@ form button, .submit-btn {
   transition: all 0.2s ease;
   margin-top: 10px;
 }
-form button:hover, .submit-btn:hover {
+form button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 .remove-btn {
+  border-radius: 50%;
   border: none;
-  background-color: transparent;
+  background-color: #fff1f1;
   color: var(--cor-erro);
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
-  padding: 0 10px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+.remove-btn:hover {
+  background-color: var(--cor-erro);
+  color: var(--cor-branco);
+  transform: scale(1.1);
 }
 .error-message {
   color: var(--cor-erro);
   text-align: center;
   font-weight: 500;
 }
+.filter-container {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+.filter-container input {
+  flex-grow: 1;
+}
+.filter-container select {
+  min-width: 200px;
+}
 
-/* === Cards e Listas === */
+/* === 4. COMPONENTES DE PÁGINA (DASHBOARD, LISTAS, ETC) === */
 .orcamento-status {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
   background-color: #f7f9fc;
   padding: 20px;
   border-radius: 12px;
   margin: 20px 0;
   font-size: 1.2rem;
+  gap: 20px;
 }
 table {
   width: 100%;
@@ -131,15 +169,13 @@ table {
   margin-top: 20px;
 }
 th, td {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
+  padding: 12px 15px;
+  border-bottom: var(--borda-suave);
   text-align: left;
 }
 th {
-  background-color: #f2f2f2;
+  background-color: #f8f9fa;
 }
-
-/* === Dashboard === */
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -159,7 +195,7 @@ th {
 }
 .dashboard-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  box-shadow: var(--sombra-suave);
 }
 .card-total {
   font-size: 2.2rem;
@@ -172,11 +208,13 @@ th {
 .countdown {
   font-size: 1.2rem;
   text-align: center;
-  margin-top: -10px;
-  padding-bottom: 20px;
+  width: 100%;
+  padding: 10px;
+  background-color: #e6f7ff;
+  border: 1px solid #91d5ff;
+  color: #096dd9;
+  border-radius: 8px;
 }
-
-/* === Checklist & Convidados === */
 .checklist, .convidados-list ul {
   list-style-type: none;
   padding: 0;
@@ -186,7 +224,7 @@ th {
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  border-bottom: 1px solid var(--cor-fundo);
+  border-bottom: var(--borda-suave);
 }
 .checklist li.concluido span {
   text-decoration: line-through;
@@ -197,33 +235,47 @@ th {
   width: 20px;
   height: 20px;
 }
-.checklist li .remove-btn, .convidados-list li .remove-btn {
-  margin-left: auto;
-}
 .convidado-actions button {
   margin-left: 10px;
-  padding: 5px 10px;
-  font-size: 0.8rem;
+  padding: 5px 10px !important;
+  font-size: 0.8rem !important;
 }
 .add-family-btn {
   background-color: var(--cor-sucesso) !important;
   color: white;
+  border: none;
+  border-radius: 5px;
+}
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  margin-top: 30px;
+  border: 2px dashed #ddd;
+}
+.empty-state h3 {
+  color: var(--cor-texto-secundario);
+  border-bottom: none;
+}
+.empty-state p {
+  font-size: 1rem;
+  color: #777;
 }
 
-/* === Estilos do Modal === */
+/* === 5. COMPONENTES ESPECIAIS (MODAL, CONVITE) === */
 .modal-backdrop {
-  position: fixed; /* Cobre a tela inteira */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Fundo preto com 60% de opacidade */
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Garante que fique na frente de tudo */
+  z-index: 1000;
 }
-
 .modal-content {
   background-color: var(--cor-branco);
   padding: 30px 40px;
@@ -232,7 +284,6 @@ th {
   position: relative;
   min-width: 400px;
 }
-
 .modal-close-btn {
   position: absolute;
   top: 10px;
@@ -243,72 +294,117 @@ th {
   color: #aaa;
   cursor: pointer;
 }
+.convite-loading, .convite-background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.convite-loading {
+  font-size: 1.5rem;
+  color: #555;
+}
+.convite-background {
+  width: 100%;
+  background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+  padding: 20px;
+}
+.convite-card {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  font-family: 'Georgia', serif;
+}
+.convite-header h1 { border-bottom: none; }
+.convite-nome-bebe {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.8rem;
+  color: var(--cor-primaria);
+  margin: 10px 0 20px 0;
+}
+.meu-convite-container h2 {
+  border-bottom: 2px solid var(--cor-primaria);
+  padding-bottom: 10px;
+}
+.preview-container {
+  padding: 30px;
+  background-color: var(--cor-fundo);
+  border-radius: 12px;
+  margin-top: 20px;
+}
+.actions-container {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+.link-box {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.link-box input {
+  flex-grow: 1;
+  background-color: #f1f1f1;
+  color: #555;
+  font-family: monospace;
+}
+.download-box {
+  margin-top: 20px;
+}
+.download-box button {
+  width: 100%;
+  background: var(--cor-sucesso);
+}
 
-/* --- MEDIA QUERIES PARA RESPONSIVIDADE (CELULAR) --- */
-/* Estes estilos só serão aplicados quando a tela for de 768px ou menor */
 
+/* === 6. RESPONSIVIDADE (MEDIA QUERIES) --- Deve ser o último bloco --- */
 @media (max-width: 768px) {
-
-  /* Ajusta o container principal para telas menores */
   .App {
     margin: 10px;
     padding: 15px;
   }
-
-  /* Faz a barra de navegação ficar na vertical para não quebrar */
   .navbar {
     flex-direction: column;
     gap: 15px;
   }
-
   .nav-links {
-    display: flex;
-    flex-wrap: wrap; /* Permite que os links quebrem a linha */
+    flex-wrap: wrap;
     justify-content: center;
     gap: 5px;
   }
-
-  /* Melhora a visualização dos totais */
   .orcamento-status {
     flex-direction: column;
     gap: 10px;
-    text-align: center;
   }
-
-  /* --- MÁGICA DA TABELA RESPONSIVA --- */
-  /* Esta parte transforma nossas tabelas em uma lista de "cards" no celular */
-
   .gastos-list table, 
   .gastos-list thead, 
   .gastos-list tbody, 
   .gastos-list th, 
   .gastos-list td, 
   .gastos-list tr {
-    display: block; /* Faz cada elemento se comportar como uma div */
+    display: block;
   }
-
-  /* Esconde o cabeçalho da tabela no celular (vamos recriá-lo nos itens) */
   .gastos-list thead tr {
     position: absolute;
     top: -9999px;
     left: -9999px;
   }
-
   .gastos-list tr {
     border: 1px solid #ccc;
     margin-bottom: 15px;
     border-radius: 8px;
   }
-
   .gastos-list td {
     border: none;
     border-bottom: 1px solid #eee;
     position: relative;
-    padding-left: 50%; /* Deixa espaço para o "rótulo" */
-    text-align: right; /* Alinha o valor à direita */
+    padding-left: 50%;
+    text-align: right;
   }
-
-  /* Adiciona o "rótulo" (ex: "Valor:") antes do conteúdo de cada célula */
   .gastos-list td:before {
     position: absolute;
     top: 50%;
@@ -319,9 +415,8 @@ th {
     white-space: nowrap;
     text-align: left;
     font-weight: bold;
+    color: var(--cor-texto-secundario);
   }
-
-  /* Define o texto de cada rótulo */
   .gastos-list td:nth-of-type(1):before { content: "Descrição:"; }
   .gastos-list td:nth-of-type(2):before { content: "Fornecedor:"; }
   .gastos-list td:nth-of-type(3):before { content: "Valor:"; }
