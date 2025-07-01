@@ -2,23 +2,22 @@ from app import db, bcrypt
 from datetime import datetime
 # A importação de werkzeug e flask_login foi removida
 
-class Usuario(db.Model): # Removido o 'UserMixin'
+class Usuario(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     nome_completo = db.Column(db.String(150), nullable=False)
-    username = db.Column(db.String(64), unique=True, nullable=False)
+    username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(256))
     data_cha = db.Column(db.DateTime, nullable=True)
     local_cha = db.Column(db.String(200), nullable=True)
     setup_completo = db.Column(db.Boolean, default=False, nullable=False)
 
-    # Relacionamentos continuam os mesmos
+    # Relacionamentos
     bebes = db.relationship('Bebe', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     convidados = db.relationship('Convidado', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     gastos = db.relationship('Gasto', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     checklist_items = db.relationship('ChecklistItem', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     enxoval_items = db.relationship('EnxovalItem', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
-    
-    # Métodos de senha atualizados para usar bcrypt
+
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
