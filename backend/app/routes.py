@@ -250,11 +250,15 @@ def update_checklist_item(current_user, item_id):
     item = db.session.get(ChecklistItem, item_id)
     if not item or item.user_id != current_user.id:
         return jsonify({'message': 'Acesso não autorizado.'}), 404
+
     data = request.get_json()
+
+    # Lógica atualizada: verifica se veio 'concluido' OU 'tarefa'
     if 'concluido' in data:
         item.concluido = data['concluido']
     if 'tarefa' in data:
         item.tarefa = data['tarefa']
+
     db.session.commit()
     return jsonify({'message': 'Item atualizado.'})
 

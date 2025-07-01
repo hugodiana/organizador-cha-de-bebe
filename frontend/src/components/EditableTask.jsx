@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 
-function EditableTask({ item, onUpdate }) {
+function EditableText({ initialValue, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [text, setText] = useState(item.tarefa);
+  const [text, setText] = useState(initialValue);
 
-  const handleUpdate = () => {
-    // Só salva se o texto mudou
-    if (text.trim() && text !== item.tarefa) {
-      onUpdate(item.id, text);
+  const handleSave = () => {
+    // Só salva se o texto mudou e não está vazio
+    if (text.trim() && text !== initialValue) {
+      onSave(text);
+    } else {
+      // Se o texto não mudou ou está vazio, reverte para o valor original
+      setText(initialValue);
     }
     setIsEditing(false);
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      handleUpdate();
+      handleSave();
     } else if (e.key === 'Escape') {
-      setText(item.tarefa); // Cancela a edição
+      setText(initialValue); // Cancela a edição
       setIsEditing(false);
     }
   };
@@ -27,9 +30,9 @@ function EditableTask({ item, onUpdate }) {
         type="text"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        onBlur={handleUpdate} // Salva quando o campo perde o foco
+        onBlur={handleSave} // Salva quando o campo perde o foco
         onKeyDown={handleKeyDown}
-        autoFocus // Foca no campo de input automaticamente
+        autoFocus
         className="editable-input"
       />
     );
@@ -37,9 +40,9 @@ function EditableTask({ item, onUpdate }) {
 
   return (
     <span onDoubleClick={() => setIsEditing(true)} className="editable-span">
-      {item.tarefa}
+      {initialValue}
     </span>
   );
 }
 
-export default EditableTask;
+export default EditableText;
