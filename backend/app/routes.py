@@ -16,18 +16,16 @@ api = Blueprint('api', __name__)
 @api.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    if not all(key in data for key in ['username', 'password', 'nome_completo', 'email']):
-        return jsonify({'message': 'Dados faltando. Todos os campos são obrigatórios.'}), 400
+    # Validação simplificada
+    if not all(key in data for key in ['username', 'password', 'nome_completo']):
+        return jsonify({'message': 'Todos os campos são obrigatórios.'}), 400
     if Usuario.query.filter_by(username=data['username']).first():
         return jsonify({'message': 'Este nome de usuário já está em uso.'}), 409
-    if Usuario.query.filter_by(email=data['email']).first():
-        return jsonify({'message': 'Este email já está cadastrado.'}), 409
-    
+
+    # Criação do usuário simplificada
     novo_usuario = Usuario(
         username=data['username'],
-        nome_completo=data['nome_completo'],
-        email=data['email'],
-        telefone=data.get('telefone')
+        nome_completo=data['nome_completo']
     )
     novo_usuario.set_password(data['password'])
     db.session.add(novo_usuario)

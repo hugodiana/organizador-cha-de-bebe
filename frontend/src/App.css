@@ -490,3 +490,69 @@ th {
   padding: 8px 12px;
   margin-top: 0;
 }
+
+/* === Estilos Aprimorados para Login/Cadastro === */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+.auth-form {
+  max-width: 400px;
+  width: 100%;
+  padding: 30px;
+  border: var(--borda-suave);
+  border-radius: 12px;
+  background-color: var(--cor-branco);
+  box-shadow: var(--sombra-suave);
+}
+.auth-form h2 {
+  border-bottom: none;
+  margin-bottom: 10px;
+}
+.auth-form p {
+  text-align: center;
+  color: var(--cor-texto-secundario);
+  margin-bottom: 25px;
+}
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.password-wrapper input {
+  padding-right: 80px; /* Espaço para o botão */
+}
+.password-wrapper button {
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  bottom: 1px;
+  border: none;
+  background: #f0f0f0;
+  color: var(--cor-texto-secundario);
+  padding: 0 10px;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 0 8px 8px 0;
+}
+.auth-link {
+  text-align: center;
+  margin-top: 20px;
+}
+.auth-link a {
+  color: var(--cor-primaria);
+  font-weight: 600;
+}
+
+/* === Correção de Alinhamento na Personalização === */
+.personalizacao-container .checkbox-group {
+    display: flex;
+    align-items: center; /* Alinha verticalmente o checkbox e o label */
+    gap: 8px;
+    margin-top: 10px;
+}
+.personalizacao-container .checkbox-group input {
+    width: auto; /* Permite que o checkbox tenha seu tamanho natural */
+}
