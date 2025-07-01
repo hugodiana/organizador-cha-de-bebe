@@ -45,6 +45,7 @@ class Gasto(db.Model):
 class Convidado(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(150), nullable=False)
+    confirmado = db.Column(db.Boolean, default=False, nullable=False)
     convidado_principal_id = db.Column(db.Integer, db.ForeignKey('convidado.id'), nullable=True)
     familia = db.relationship('Convidado', backref=db.backref('principal', remote_side=[id]))
     user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)

@@ -232,6 +232,20 @@ def delete_convidado(convidado_id):
     db.session.commit()
     return jsonify({'message': 'Convidado(s) removido(s).'})
 
+@api.route('/convidados/<int:convidado_id>/confirmar', methods=['PUT'])
+@login_required
+def confirmar_convidado(convidado_id):
+    convidado = db.session.get(Convidado, convidado_id)
+    if not convidado or convidado.user_id != current_user.id:
+        return jsonify({'message': 'Acesso não autorizado.'}), 403
+
+    data = request.get_json()
+    if 'confirmado' in data:
+        convidado.confirmado = data['confirmado']
+        db.session.commit()
+
+    return jsonify({'message': 'Status do convidado atualizado.'})
+
 # --- ROTAS DE CHECKLIST ---
 
 @api.route('/checklist', methods=['GET'])
