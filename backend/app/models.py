@@ -1,8 +1,11 @@
+# Arquivo: backend/app/models.py (Versão Final Corrigida)
+
 from app import db, bcrypt
 from datetime import datetime
-# A importação de werkzeug e flask_login foi removida
+# A linha "from flask_login import UserMixin" foi removida daqui
 
-class Usuario(db.Model, UserMixin):
+# A classe Usuario agora não herda mais de UserMixin
+class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome_completo = db.Column(db.String(150), nullable=False)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -24,6 +27,7 @@ class Usuario(db.Model, UserMixin):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
 
+# O resto das classes (Bebe, Gasto, Convidado, etc.) continua exatamente igual
 class Bebe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
@@ -33,7 +37,7 @@ class Bebe(db.Model):
 class Gasto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     descricao = db.Column(db.String(200), nullable=False)
-    fornecedor = db.Column(db.String(150))
+    fornecedor = db.Column(db.String(150), nullable=True)
     valor = db.Column(db.Float, nullable=False)
     metodo_pagamento = db.Column(db.String(50), nullable=False)
     data_gasto = db.Column(db.DateTime, default=datetime.utcnow)
@@ -44,7 +48,7 @@ class Convidado(db.Model):
     nome = db.Column(db.String(150), nullable=False)
     confirmado = db.Column(db.Boolean, default=False, nullable=False)
     convidado_principal_id = db.Column(db.Integer, db.ForeignKey('convidado.id'), nullable=True)
-    familia = db.relationship('Convidado', backref=db.backref('principal', remote_side=[id]))
+    familia = db.relationship('Convidado', backref=db.backref('principal', remote_side=[id]), cascade="all, delete-orphan")
     user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
 
 class ChecklistItem(db.Model):
