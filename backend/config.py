@@ -10,5 +10,5 @@ class Config:
 
     # --- MUDANÇA NA CONFIGURAÇÃO DO COOKIE ---
     SESSION_COOKIE_HTTPONLY = True
-    SESSION_COOKIE_SAMESITE = 'None' # Mudamos de 'Lax' para 'None'
+    SESSION_COOKIE_SAMESITE = 'Lax' # Mudamos de 'Lax' para 'None'
     SESSION_COOKIE_SECURE = True     # Adicionamos a flag Secure
