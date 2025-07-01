@@ -13,6 +13,7 @@ class Usuario(db.Model, UserMixin):
     username = db.Column(db.String(64), unique=True, nullable=False)
     password_hash = db.Column(db.String(256))
     data_cha = db.Column(db.DateTime, nullable=True)
+    local_cha = db.Column(db.String(200), nullable=True)
     setup_completo = db.Column(db.Boolean, default=False, nullable=False)
 
     bebes = db.relationship('Bebe', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
