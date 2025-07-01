@@ -18,7 +18,8 @@ class Usuario(db.Model, UserMixin):
     convidados = db.relationship('Convidado', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     gastos = db.relationship('Gasto', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     checklist_items = db.relationship('ChecklistItem', backref='organizador', lazy='dynamic', cascade="all, delete-orphan") # Relacionamento para o checklist
-
+    enxoval_items = db.relationship('EnxovalItem', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
+    
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 

@@ -96,28 +96,37 @@ def get_dados_convite(user_id):
 
 # --- ROTAS PROTEGIDAS DA APLICAÇÃO ---
 
-@api.route('/dashboard', methods=['GET'])
+api.route('/dashboard', methods=['GET'])
 @login_required
 def get_dashboard_data():
-    user = current_user
-    bebes = user.bebes.all()
-    bebes_data = [{'nome': b.nome, 'sexo': b.sexo} for b in bebes]
-    data_cha = user.data_cha.isoformat() if user.data_cha else None
-    total_gasto = db.session.query(func.sum(Gasto.valor)).filter(Gasto.user_id == user.id).scalar() or 0.0
-    convidados_principais = Convidado.query.filter_by(user_id=user.id, convidado_principal_id=None).all()
-    total_convidados = sum(1 + len(p.familia) for p in convidados_principais)
-    total_tarefas = ChecklistItem.query.filter_by(user_id=user.id).count() or 0
-    tarefas_concluidas = ChecklistItem.query.filter_by(user_id=user.id, concluido=True).count() or 0
-    
-    dashboard_info = {
-        'nome_organizador': user.nome_completo,
-        'bebes': bebes_data,
-        'data_cha': data_cha,
-        'resumo_gastos': { 'total': total_gasto },
-        'resumo_convidados': { 'total': total_convidados },
-        'resumo_checklist': { 'total': total_tarefas, 'concluidas': tarefas_concluidas }
-    }
-    return jsonify(dashboard_info)
+    try:
+        user = current_user
+
+        bebes = user.bebes.all()
+        bebes_data = [{'nome': b.nome, 'sexo': b.sexo} for b in bebes]
+        data_cha = user.data_cha.isoformat() if user.data_cha else None
+
+        total_gasto = db.session.query(func.sum(Gasto.valor)).filter(Gasto.user_id == user.id).scalar() or 0.0
+
+        convidados_principais = Convidado.query.filter_by(user_id=user.id, convidado_principal_id=None).all()
+        total_convidados = sum(1 + len(p.familia) for p in convidados_principais) if convidados_principais else 0
+
+        total_tarefas = ChecklistItem.query.filter_by(user_id=user.id).count() or 0
+        tarefas_concluidas = ChecklistItem.query.filter_by(user_id=user.id, concluido=True).count() or 0
+
+        dashboard_info = {
+            'nome_organizador': user.nome_completo,
+            'bebes': bebes_data,
+            'data_cha': data_cha,
+            'resumo_gastos': { 'total': total_gasto },
+            'resumo_convidados': { 'total': total_convidados },
+            'resumo_checklist': { 'total': total_tarefas, 'concluidas': tarefas_concluidas }
+        }
+        return jsonify(dashboard_info)
+
+    except Exception as e:
+        print(f"!!! ERRO GRAVE NO DASHBOARD: {e}")
+        return jsonify({'message': 'Erro interno ao processar dados do dashboard.'}), 500
 
 # --- ROTAS DE CONFIGURAÇÕES ---
 
