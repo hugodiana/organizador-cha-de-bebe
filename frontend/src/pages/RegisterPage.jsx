@@ -23,10 +23,15 @@ function RegisterPage() {
 
     try {
       await apiClient.post('/register', { nome_completo: nomeCompleto, username, password });
-      toast.success('Cadastro realizado com sucesso! Agora faça o login.');
-      navigate('/login');
+
+      // --- LÓGICA ATUALIZADA ---
+      toast.success('Cadastro realizado com sucesso!');
+      // Redireciona para o login após 1.5 segundos para dar tempo de ler o toast
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
+
     } catch (error) {
-      console.error("Erro no cadastro:", error);
       const message = error.response?.data?.message || "Erro ao registrar.";
       toast.error(message);
     } finally {
@@ -34,6 +39,7 @@ function RegisterPage() {
     }
   };
 
+  // O if(success) foi removido pois não precisamos mais dele
   return (
     <div className="auth-container">
       <div className="auth-form">
@@ -49,7 +55,7 @@ function RegisterPage() {
             </button>
           </div>
           <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
+            {isSubmitting ? 'Cadastrando...' : 'Criar Conta'}
           </button>
         </form>
         <div className="auth-link">
