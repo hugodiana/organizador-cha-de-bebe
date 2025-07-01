@@ -1,20 +1,28 @@
+// Arquivo: frontend/src/App.jsx (Versão Corrigida e Completa)
+
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { Toaster } from 'react-hot-toast'
 
-// --- Importação de Componentes de Layout ---
+// --- Componentes de Layout ---
 import Navbar from './components/Navbar';
 
-// --- Importação de Páginas ---
+// --- Páginas Públicas ---
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import PersonalizacaoPage from './pages/PersonalizacaoPage';
-import DashboardPage from './pages/DashboardPage'; // A importação aparece apenas UMA VEZ agora
 
-// --- Importação de Estilos ---
+// --- Páginas Protegidas ---
+import PersonalizacaoPage from './pages/PersonalizacaoPage';
+import DashboardPage from './pages/DashboardPage';
+import GastosPage from './pages/GastosPage';
+import ConvidadosPage from './pages/ConvidadosPage';
+import ChecklistPage from './pages/ChecklistPage';
+import ConfiguracoesPage from './pages/ConfiguracoesPage';
+
+// --- Estilos ---
 import './App.css';
 
-
-// Este componente decide qual conjunto de rotas mostrar
+// Componente que decide qual conjunto de rotas mostrar
 function AppRoutes() {
   const { user, loading } = useAuth();
 
@@ -42,22 +50,28 @@ function AppRoutes() {
       </Routes>
     );
   }
-
-  // Se HÁ um usuário logado E o setup ESTÁ completo
+  
+  // Se HÁ um usuário logado E o setup ESTÁ completo, mostra as rotas da área logada
   return (
     <Routes>
       <Route path="/dashboard" element={<DashboardPage />} />
-      {/* Adicione outras rotas do app aqui (ex: /convidados, /gastos) */}
+      <Route path="/gastos" element={<GastosPage />} />
+      <Route path="/convidados" element={<ConvidadosPage />} />
+      <Route path="/checklist" element={<ChecklistPage />} />
+      <Route path="/configuracoes" element={<ConfiguracoesPage />} />
+      
+      {/* Redirecionamento padrão para o dashboard */}
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 }
 
-
+// Componente App principal
 function App() {
   return (
     <Router>
       <div className="App">
+        <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
         <Navbar />
         <main className="content">
           <AppRoutes />

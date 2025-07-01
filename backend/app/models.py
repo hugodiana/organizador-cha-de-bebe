@@ -1,9 +1,10 @@
+# Arquivo: backend/app/models.py (Versão Corrigida)
+
 from app import db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
-# A definição da classe Usuario precisa estar correta para ser importada
 class Usuario(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     nome_completo = db.Column(db.String(150), nullable=False)
@@ -17,6 +18,7 @@ class Usuario(db.Model, UserMixin):
     bebes = db.relationship('Bebe', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     convidados = db.relationship('Convidado', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     gastos = db.relationship('Gasto', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
+    checklist_items = db.relationship('ChecklistItem', backref='organizador', lazy='dynamic', cascade="all, delete-orphan") # Relacionamento para o checklist
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -44,4 +46,11 @@ class Convidado(db.Model):
     nome = db.Column(db.String(150), nullable=False)
     convidado_principal_id = db.Column(db.Integer, db.ForeignKey('convidado.id'), nullable=True)
     familia = db.relationship('Convidado', backref=db.backref('principal', remote_side=[id]))
+    user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+
+# --- CLASSE QUE FALTAVA ---
+class ChecklistItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tarefa = db.Column(db.String(300), nullable=False)
+    concluido = db.Column(db.Boolean, default=False, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
