@@ -31,6 +31,7 @@ function Navbar() {
         <Link to="/checklist">Checklist</Link>
         <Link to="/configuracoes">Configurações</Link>
         <Link to="/meu-convite">Meu Convite</Link>
+        <Link to="/enxoval">Enxoval</Link>
       </div>
       <div className="nav-auth">
         <span>Olá, {user.nome_completo}!</span>

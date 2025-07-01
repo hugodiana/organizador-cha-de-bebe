@@ -556,3 +556,14 @@ th {
 .personalizacao-container .checkbox-group input {
     width: auto; /* Permite que o checkbox tenha seu tamanho natural */
 }
+
+.enxoval-categoria {
+    margin-bottom: 30px;
+}
+.enxoval-categoria h3 {
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--cor-fundo);
+    margin-bottom: 10px;
+    text-align: left;
+    color: var(--cor-primaria);
+}

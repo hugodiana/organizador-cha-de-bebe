@@ -12,6 +12,7 @@ import ChecklistPage from './pages/ChecklistPage';
 import ConfiguracoesPage from './pages/ConfiguracoesPage';
 import ConvitePublicoPage from './pages/ConvitePublicoPage';
 import MeuConvitePage from './pages/MeuConvitePage';
+import EnxovalPage from './pages/EnxovalPage';
 import './App.css';
 
 // Componente para renderizar o layout principal (com Navbar e estilos)
@@ -66,6 +67,7 @@ function App() {
               <Route path="/checklist" element={<MainLayout><ChecklistPage /></MainLayout>} />
               <Route path="/configuracoes" element={<MainLayout><ConfiguracoesPage /></MainLayout>} />
               <Route path="/meu-convite" element={<MeuConvitePage />} />
+              <Route path="/enxoval" element={<EnxovalPage />} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </>
           )

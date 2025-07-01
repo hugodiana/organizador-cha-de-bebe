@@ -54,3 +54,10 @@ class ChecklistItem(db.Model):
     tarefa = db.Column(db.String(300), nullable=False)
     concluido = db.Column(db.Boolean, default=False, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+
+class EnxovalItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    item = db.Column(db.String(300), nullable=False)
+    categoria = db.Column(db.String(100), nullable=False)
+    concluido = db.Column(db.Boolean, default=False, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
