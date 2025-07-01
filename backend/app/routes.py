@@ -1,13 +1,11 @@
-# Arquivo: backend/app/routes.py (Versão Final e Corrigida)
-
 from flask import Blueprint, request, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import datetime
 from sqlalchemy import func
 
 from app import db
-# Importação de TODOS os modelos necessários
-from app.models import Usuario, Bebe, Gasto, Convidado, ChecklistItem
+# Importação de TODOS os modelos necessários, incluindo EnxovalItem
+from app.models import Usuario, Bebe, Gasto, Convidado, ChecklistItem, EnxovalItem
 
 api = Blueprint('api', __name__)
 
@@ -16,16 +14,14 @@ api = Blueprint('api', __name__)
 @api.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    # Validação simplificada
     if not all(key in data for key in ['username', 'password', 'nome_completo']):
-        return jsonify({'message': 'Todos os campos são obrigatórios.'}), 400
+        return jsonify({'message': 'Nome completo, de usuário e senha são obrigatórios.'}), 400
     if Usuario.query.filter_by(username=data['username']).first():
         return jsonify({'message': 'Este nome de usuário já está em uso.'}), 409
-
-    # Criação do usuário simplificada
+    
     novo_usuario = Usuario(
         username=data['username'],
-        nome_completo=data['nome_completo']
+        nome_completo=data['nome_completo'],
     )
     novo_usuario.set_password(data['password'])
     db.session.add(novo_usuario)
@@ -40,7 +36,7 @@ def login():
         login_user(user)
         return jsonify({
             'message': 'Login realizado com sucesso!',
-            'user': { 'username': user.username, 'nome_completo': user.nome_completo, 'setup_completo': user.setup_completo, 'id': user.id }
+            'user': { 'id': user.id, 'username': user.username, 'nome_completo': user.nome_completo, 'setup_completo': user.setup_completo }
         })
     return jsonify({'message': 'Credenciais inválidas.'}), 401
 
@@ -55,7 +51,7 @@ def status():
     if current_user.is_authenticated:
         return jsonify({
             'is_logged_in': True,
-            'user': { 'username': current_user.username, 'nome_completo': current_user.nome_completo, 'setup_completo': current_user.setup_completo, 'id': current_user.id }
+            'user': { 'id': current_user.id, 'username': current_user.username, 'nome_completo': current_user.nome_completo, 'setup_completo': current_user.setup_completo }
         })
     return jsonify({'is_logged_in': False})
 
@@ -70,10 +66,15 @@ def personalizar_cha():
         return jsonify({'message': 'Os dados do bebê são obrigatórios.'}), 400
     if data.get('data_cha'):
         user.data_cha = datetime.strptime(data['data_cha'], '%Y-%m-%d')
+    if data.get('local_cha'):
+        user.local_cha = data['local_cha']
+
+    Bebe.query.filter_by(user_id=user.id).delete()
     for bebe_data in data['bebes']:
         if bebe_data.get('nome'):
             novo_bebe = Bebe(nome=bebe_data['nome'], sexo=bebe_data['sexo'], organizador=user)
             db.session.add(novo_bebe)
+            
     user.setup_completo = True
     db.session.commit()
     return jsonify({'message': 'Personalização salva com sucesso!'})
@@ -88,47 +89,31 @@ def get_dados_convite(user_id):
     bebes = user.bebes.all()
     bebes_data = [{'nome': b.nome} for b in bebes]
     data_cha = user.data_cha.isoformat() if user.data_cha else None
-    return jsonify({
-        'bebes': bebes_data,
-        'data_cha': data_cha,
-        'local_cha': user.local_cha
-    })
+    return jsonify({'bebes': bebes_data, 'data_cha': data_cha, 'local_cha': user.local_cha})
 
 # --- ROTAS PROTEGIDAS DA APLICAÇÃO ---
 
-api.route('/dashboard', methods=['GET'])
+@api.route('/dashboard', methods=['GET'])
 @login_required
 def get_dashboard_data():
-    try:
-        user = current_user
-
-        bebes = user.bebes.all()
-        bebes_data = [{'nome': b.nome, 'sexo': b.sexo} for b in bebes]
-        data_cha = user.data_cha.isoformat() if user.data_cha else None
-
-        total_gasto = db.session.query(func.sum(Gasto.valor)).filter(Gasto.user_id == user.id).scalar() or 0.0
-
-        convidados_principais = Convidado.query.filter_by(user_id=user.id, convidado_principal_id=None).all()
-        total_convidados = sum(1 + len(p.familia) for p in convidados_principais) if convidados_principais else 0
-
-        total_tarefas = ChecklistItem.query.filter_by(user_id=user.id).count() or 0
-        tarefas_concluidas = ChecklistItem.query.filter_by(user_id=user.id, concluido=True).count() or 0
-
-        dashboard_info = {
-            'nome_organizador': user.nome_completo,
-            'bebes': bebes_data,
-            'data_cha': data_cha,
-            'resumo_gastos': { 'total': total_gasto },
-            'resumo_convidados': { 'total': total_convidados },
-            'resumo_checklist': { 'total': total_tarefas, 'concluidas': tarefas_concluidas }
-        }
-        return jsonify(dashboard_info)
-
-    except Exception as e:
-        print(f"!!! ERRO GRAVE NO DASHBOARD: {e}")
-        return jsonify({'message': 'Erro interno ao processar dados do dashboard.'}), 500
-
-# --- ROTAS DE CONFIGURAÇÕES ---
+    user = current_user
+    bebes = user.bebes.all()
+    bebes_data = [{'nome': b.nome, 'sexo': b.sexo} for b in bebes]
+    data_cha = user.data_cha.isoformat() if user.data_cha else None
+    total_gasto = db.session.query(func.sum(Gasto.valor)).filter(Gasto.user_id == user.id).scalar() or 0.0
+    convidados_principais = Convidado.query.filter_by(user_id=user.id, convidado_principal_id=None).all()
+    total_convidados = sum(1 + len(p.familia) for p in convidados_principais)
+    total_tarefas = ChecklistItem.query.filter_by(user_id=user.id).count() or 0
+    tarefas_concluidas = ChecklistItem.query.filter_by(user_id=user.id, concluido=True).count() or 0
+    
+    return jsonify({
+        'nome_organizador': user.nome_completo,
+        'bebes': bebes_data,
+        'data_cha': data_cha,
+        'resumo_gastos': { 'total': total_gasto },
+        'resumo_convidados': { 'total': total_convidados },
+        'resumo_checklist': { 'total': total_tarefas, 'concluidas': tarefas_concluidas }
+    })
 
 @api.route('/configuracoes', methods=['GET'])
 @login_required
@@ -179,8 +164,6 @@ def get_gastos():
 @login_required
 def add_gasto():
     data = request.get_json()
-    if not data or not data.get('descricao') or not data.get('valor'):
-        return jsonify({'message': 'Descrição e valor são obrigatórios.'}), 400
     novo_gasto = Gasto(
         descricao=data['descricao'],
         fornecedor=data.get('fornecedor'),
@@ -210,16 +193,14 @@ def get_convidados():
     convidados_principais = Convidado.query.filter_by(organizador=current_user, convidado_principal_id=None).order_by(Convidado.nome).all()
     lista_completa = []
     for principal in convidados_principais:
-        familiares = [{'id': familiar.id, 'nome': familiar.nome} for familiar in principal.familia]
-        lista_completa.append({'id': principal.id, 'nome': principal.nome, 'familia': familiares})
+        familiares = [{'id': familiar.id, 'nome': familiar.nome, 'confirmado': familiar.confirmado} for familiar in principal.familia]
+        lista_completa.append({'id': principal.id, 'nome': principal.nome, 'confirmado': principal.confirmado, 'familia': familiares})
     return jsonify(lista_completa)
 
 @api.route('/convidados', methods=['POST'])
 @login_required
 def add_convidado():
     data = request.get_json()
-    if not data or not data.get('nome'):
-        return jsonify({'message': 'O nome do convidado é obrigatório.'}), 400
     novo_convidado = Convidado(
         nome=data['nome'],
         convidado_principal_id=data.get('convidado_principal_id'),
@@ -227,7 +208,7 @@ def add_convidado():
     )
     db.session.add(novo_convidado)
     db.session.commit()
-    return jsonify({'id': novo_convidado.id, 'nome': novo_convidado.nome}), 201
+    return jsonify({'id': novo_convidado.id, 'nome': novo_convidado.nome, 'confirmado': novo_convidado.confirmado}), 201
 
 @api.route('/convidados/<int:convidado_id>', methods=['DELETE'])
 @login_required
@@ -245,15 +226,13 @@ def confirmar_convidado(convidado_id):
     convidado = db.session.get(Convidado, convidado_id)
     if not convidado or convidado.user_id != current_user.id:
         return jsonify({'message': 'Acesso não autorizado.'}), 403
-
     data = request.get_json()
     if 'confirmado' in data:
         convidado.confirmado = data['confirmado']
         db.session.commit()
-
     return jsonify({'message': 'Status do convidado atualizado.'})
 
-# --- ROTAS DE CHECKLIST ---
+# --- ROTAS DE CHECKLIST DE ORGANIZAÇÃO ---
 
 @api.route('/checklist', methods=['GET'])
 @login_required
@@ -294,11 +273,11 @@ def delete_checklist_item(item_id):
     db.session.commit()
     return jsonify({'message': 'Item removido.'})
 
-# --- ROTAS DO CHECKLIST DE ENXOVAL (PROTEGIDAS) ---
+# --- ROTAS DO CHECKLIST DE ENXOVAL ---
 
 TEMPLATE_ENXOVAL = {
     "Roupas": ["Body manga curta (6)", "Body manga longa (6)", "Mijão (culote) (6)", "Macacão (6)", "Meias (6 pares)"],
-    "Higiene": ["Fraldas RN ou P", "Lenços umedecidos", "Pomada para assaduras", "Sabonete líquido (da cabeça aos pés)", "Toalha de banho com capuz (2)"],
+    "Higiene": ["Fraldas RN ou P", "Lenços umedecidos", "Pomada para assaduras", "Sabonete líquido", "Toalha de banho com capuz (2)"],
     "Quarto": ["Berço", "Colchão", "Jogo de lençol para berço (3)", "Protetor de colchão"],
     "Passeio": ["Bebê conforto para o carro", "Carrinho de bebê", "Bolsa de maternidade"]
 }
@@ -308,17 +287,13 @@ TEMPLATE_ENXOVAL = {
 def get_enxoval_items():
     user = current_user
     items = EnxovalItem.query.filter_by(user_id=user.id).all()
-
-    # Se o usuário não tem itens, cria o template para ele
     if not items:
         for categoria, lista_itens in TEMPLATE_ENXOVAL.items():
             for nome_item in lista_itens:
                 novo_item = EnxovalItem(item=nome_item, categoria=categoria, user_id=user.id)
                 db.session.add(novo_item)
         db.session.commit()
-        # Busca os itens novamente após criá-los
         items = EnxovalItem.query.filter_by(user_id=user.id).all()
-
     return jsonify([{'id': i.id, 'item': i.item, 'categoria': i.categoria, 'concluido': i.concluido} for i in items])
 
 @api.route('/enxoval/<int:item_id>', methods=['PUT'])
@@ -327,7 +302,6 @@ def update_enxoval_item(item_id):
     item = db.session.get(EnxovalItem, item_id)
     if not item or item.user_id != current_user.id:
         return jsonify({'message': 'Item não encontrado ou não autorizado.'}), 404
-
     data = request.get_json()
     if 'concluido' in data:
         item.concluido = data['concluido']
