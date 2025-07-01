@@ -567,3 +567,15 @@ th {
     text-align: left;
     color: var(--cor-primaria);
 }
+
+/* Estilo para Edição In-line */
+.editable-span {
+    cursor: pointer;
+}
+.editable-input {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 5px;
+    border: 1px solid var(--cor-primaria);
+    border-radius: 5px;
+}

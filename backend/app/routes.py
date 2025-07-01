@@ -9,7 +9,7 @@ from sqlalchemy import func
 
 api = Blueprint('api', __name__)
 
-# --- NOVO DECORATOR PARA AUTENTICAÇÃO VIA TOKEN ---
+# --- DECORATOR PARA AUTENTICAÇÃO VIA TOKEN ---
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -25,14 +25,13 @@ def token_required(f):
             current_user = db.session.get(Usuario, data['user_id'])
             if not current_user:
                 return jsonify({'message': 'Usuário do token não encontrado.'}), 401
-        except Exception as e:
-            print(f"Erro ao decodificar token: {e}")
+        except:
             return jsonify({'message': 'Token é inválido ou expirou!'}), 401
         
         return f(current_user, *args, **kwargs)
     return decorated
 
-# --- ROTAS DE AUTENTICAÇÃO ATUALIZADAS PARA TOKEN ---
+# --- ROTAS DE AUTENTICAÇÃO COM TOKEN ---
 @api.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -63,6 +62,7 @@ def login():
         })
     return jsonify({'message': 'Credenciais inválidas.'}), 401
 
+# --- ROTA DE PERFIL (Valida o token) ---
 @api.route('/profile', methods=['GET'])
 @token_required
 def get_profile(current_user):
@@ -96,13 +96,14 @@ def personalizar_cha(current_user):
         if bebe_data.get('nome'):
             novo_bebe = Bebe(nome=bebe_data['nome'], sexo=bebe_data['sexo'], organizador=current_user)
             db.session.add(novo_bebe)
-
+            
     if data.get('data_cha'):
         current_user.data_cha = datetime.strptime(data['data_cha'], '%Y-%m-%d')
     else:
         current_user.data_cha = None
     if data.get('local_cha'):
         current_user.local_cha = data['local_cha']
+        
     current_user.setup_completo = True
     db.session.commit()
     return jsonify({'message': 'Personalização salva com sucesso!'})
@@ -252,6 +253,8 @@ def update_checklist_item(current_user, item_id):
     data = request.get_json()
     if 'concluido' in data:
         item.concluido = data['concluido']
+    if 'tarefa' in data:
+        item.tarefa = data['tarefa']
     db.session.commit()
     return jsonify({'message': 'Item atualizado.'})
 
@@ -270,10 +273,7 @@ def delete_checklist_item(current_user, item_id):
 def get_enxoval_items(current_user):
     items = EnxovalItem.query.filter_by(user_id=current_user.id).all()
     if not items:
-        TEMPLATE_ENXOVAL = {
-            "Roupas": ["Body manga curta (6)", "Body manga longa (6)", "Mijão (culote) (6)"],
-            "Higiene": ["Fraldas RN ou P", "Lenços umedecidos", "Pomada para assaduras"],
-        }
+        TEMPLATE_ENXOVAL = { "Roupas": ["Body manga curta (6)"], "Higiene": ["Fraldas RN ou P"] }
         for categoria, lista_itens in TEMPLATE_ENXOVAL.items():
             for nome_item in lista_itens:
                 novo_item = EnxovalItem(item=nome_item, categoria=categoria, user_id=current_user.id)
@@ -298,8 +298,6 @@ def update_enxoval_item(current_user, item_id):
 @token_required
 def add_enxoval_item(current_user):
     data = request.get_json()
-    if not data or not data.get('item') or not data.get('categoria'):
-        return jsonify({'message': 'O nome e a categoria do item são obrigatórios.'}), 400
     novo_item = EnxovalItem(item=data['item'], categoria=data['categoria'], user_id=current_user.id)
     db.session.add(novo_item)
     db.session.commit()

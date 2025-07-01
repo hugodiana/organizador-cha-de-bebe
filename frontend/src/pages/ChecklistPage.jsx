@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import apiClient from '../api/apiClient';
 import toast from 'react-hot-toast';
+import EditableTask from '../components/EditableTask';
 
 function ChecklistPage() {
   const [items, setItems] = useState([]);
@@ -43,6 +44,17 @@ function ChecklistPage() {
     }
   };
 
+  const handleUpdateTarefa = async (id, novaTarefa) => {
+    try {
+      await apiClient.put(`/checklist/${id}`, { tarefa: novaTarefa });
+      // Atualiza o estado local para refletir a mudança imediatamente
+      setItems(items.map(item => item.id === id ? { ...item, tarefa: novaTarefa } : item));
+      toast.success("Tarefa atualizada!");
+    } catch (error) {
+      toast.error("Não foi possível atualizar a tarefa.");
+    }
+  };
+  
   const handleRemover = async (id) => {
     if (window.confirm("Tem certeza que deseja remover esta tarefa?")) {
       try {
