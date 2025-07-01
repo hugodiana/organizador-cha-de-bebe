@@ -243,3 +243,88 @@ th {
   color: #aaa;
   cursor: pointer;
 }
+
+/* --- MEDIA QUERIES PARA RESPONSIVIDADE (CELULAR) --- */
+/* Estes estilos só serão aplicados quando a tela for de 768px ou menor */
+
+@media (max-width: 768px) {
+
+  /* Ajusta o container principal para telas menores */
+  .App {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  /* Faz a barra de navegação ficar na vertical para não quebrar */
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os links quebrem a linha */
+    justify-content: center;
+    gap: 5px;
+  }
+
+  /* Melhora a visualização dos totais */
+  .orcamento-status {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  /* --- MÁGICA DA TABELA RESPONSIVA --- */
+  /* Esta parte transforma nossas tabelas em uma lista de "cards" no celular */
+
+  .gastos-list table, 
+  .gastos-list thead, 
+  .gastos-list tbody, 
+  .gastos-list th, 
+  .gastos-list td, 
+  .gastos-list tr {
+    display: block; /* Faz cada elemento se comportar como uma div */
+  }
+
+  /* Esconde o cabeçalho da tabela no celular (vamos recriá-lo nos itens) */
+  .gastos-list thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .gastos-list tr {
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    border-radius: 8px;
+  }
+
+  .gastos-list td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%; /* Deixa espaço para o "rótulo" */
+    text-align: right; /* Alinha o valor à direita */
+  }
+
+  /* Adiciona o "rótulo" (ex: "Valor:") antes do conteúdo de cada célula */
+  .gastos-list td:before {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
+
+  /* Define o texto de cada rótulo */
+  .gastos-list td:nth-of-type(1):before { content: "Descrição:"; }
+  .gastos-list td:nth-of-type(2):before { content: "Fornecedor:"; }
+  .gastos-list td:nth-of-type(3):before { content: "Valor:"; }
+  .gastos-list td:nth-of-type(4):before { content: "Pagamento:"; }
+  .gastos-list td:nth-of-type(5):before { content: "Ação:"; }
+}

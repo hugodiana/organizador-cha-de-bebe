@@ -1,52 +1,72 @@
 import { useState, useEffect } from 'react';
 import apiClient from '../api/apiClient';
+import toast from 'react-hot-toast';
 
 function GastosPage() {
   const [gastos, setGastos] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Estados para o formulário
   const [descricao, setDescricao] = useState('');
   const [fornecedor, setFornecedor] = useState('');
   const [valor, setValor] = useState('');
   const [metodoPagamento, setMetodoPagamento] = useState('Pix');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
+  const fetchGastos = () => {
     apiClient.get('/gastos')
       .then(response => {
         setGastos(response.data);
       })
-      .catch(error => console.error("Erro ao buscar gastos", error))
-      .finally(() => setLoading(false));
+      .catch(error => {
+        console.error("Erro ao buscar gastos:", error);
+        toast.error("Não foi possível carregar os gastos."); // CORRIGIDO
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchGastos();
   }, []);
 
   const handleAddGasto = async (e) => {
     e.preventDefault();
+    // CORREÇÃO: Validação corrigida para checar os campos individuais
+    if (!descricao.trim() || !valor.trim()) {
+        toast.error("Por favor, preencha a descrição e o valor.");
+        return;
+    }
+    
     const novoGasto = { descricao, fornecedor, valor: parseFloat(valor), metodo_pagamento: metodoPagamento };
-
+    
+    setIsSubmitting(true);
     try {
       const response = await apiClient.post('/gastos', novoGasto);
-      setGastos([response.data, ...gastos]); // Adiciona o novo gasto no topo da lista
-      // Limpa os campos do formulário
+      setGastos([response.data, ...gastos]);
+      toast.success("Gasto adicionado com sucesso!"); // CORRIGIDO
+      
+      // Limpa o formulário
       setDescricao('');
       setFornecedor('');
       setValor('');
       setMetodoPagamento('Pix');
     } catch (error) {
       console.error("Erro ao adicionar gasto:", error);
-      alert('Não foi possível adicionar o gasto.');
+      toast.error('Não foi possível adicionar o gasto.'); // CORRIGIDO
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleDeleteGasto = async (id) => {
-    // Confirmação antes de apagar
     if (window.confirm("Tem certeza que deseja apagar este gasto?")) {
       try {
         await apiClient.delete(`/gastos/${id}`);
-        setGastos(gastos.filter(g => g.id !== id)); // Remove o gasto da lista na tela
+        setGastos(gastos.filter(g => g.id !== id));
+        toast.success("Gasto removido com sucesso."); // CORRIGIDO
       } catch (error) {
         console.error("Erro ao apagar gasto:", error);
-        alert('Não foi possível apagar o gasto.');
+        toast.error('Não foi possível apagar o gasto.'); // CORRIGIDO
       }
     }
   };
@@ -61,7 +81,7 @@ function GastosPage() {
       <div className="orcamento-status">
         Total Gasto: <strong>R$ {totalGasto.toFixed(2)}</strong>
       </div>
-
+      
       <div className="form-container">
         <h3>Adicionar Novo Gasto</h3>
         <form onSubmit={handleAddGasto}>
@@ -75,7 +95,9 @@ function GastosPage() {
             <option>Dinheiro</option>
             <option>Outro</option>
           </select>
-          <button type="submit">Adicionar Gasto</button>
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Adicionando...' : 'Adicionar Gasto'}
+          </button>
         </form>
       </div>
 

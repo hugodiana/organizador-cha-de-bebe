@@ -71,7 +71,17 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#333',
+              color: '#fff',
+            },
+          }}
+        />
+        
         <Navbar />
         <main className="content">
           <AppRoutes />
