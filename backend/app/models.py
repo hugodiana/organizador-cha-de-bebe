@@ -1,11 +1,8 @@
-# Arquivo: backend/app/models.py (Versão Corrigida)
-
-from app import db
+from app import db, bcrypt
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
+# A importação de werkzeug e flask_login foi removida
 
-class Usuario(db.Model, UserMixin):
+class Usuario(db.Model): # Removido o 'UserMixin'
     id = db.Column(db.Integer, primary_key=True)
     nome_completo = db.Column(db.String(150), nullable=False)
     username = db.Column(db.String(64), unique=True, nullable=False)
@@ -14,17 +11,19 @@ class Usuario(db.Model, UserMixin):
     local_cha = db.Column(db.String(200), nullable=True)
     setup_completo = db.Column(db.Boolean, default=False, nullable=False)
 
+    # Relacionamentos continuam os mesmos
     bebes = db.relationship('Bebe', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     convidados = db.relationship('Convidado', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     gastos = db.relationship('Gasto', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
-    checklist_items = db.relationship('ChecklistItem', backref='organizador', lazy='dynamic', cascade="all, delete-orphan") # Relacionamento para o checklist
+    checklist_items = db.relationship('ChecklistItem', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     enxoval_items = db.relationship('EnxovalItem', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     
+    # Métodos de senha atualizados para usar bcrypt
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+        return bcrypt.check_password_hash(self.password_hash, password)
 
 class Bebe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -49,7 +48,6 @@ class Convidado(db.Model):
     familia = db.relationship('Convidado', backref=db.backref('principal', remote_side=[id]))
     user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
 
-# --- CLASSE QUE FALTAVA ---
 class ChecklistItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     tarefa = db.Column(db.String(300), nullable=False)
