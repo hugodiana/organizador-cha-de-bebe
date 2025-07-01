@@ -178,29 +178,34 @@ th {
 }
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(2, 1fr); /* Define 2 colunas de tamanho igual */
   gap: 25px;
   margin-top: 20px;
+}
+/* Faz o primeiro card da grade ocupar as duas colunas */
+.dashboard-card-link:nth-child(1) {
+  grid-column: span 2;
 }
 .dashboard-card-link {
   text-decoration: none;
   color: inherit;
 }
 .dashboard-card {
-  background-color: #f7f9fc;
+  background-color: var(--cor-secundaria); /* Um roxo pastel sólido */
   padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border: 2px solid var(--cor-texto-principal);
+  box-shadow: 4px 4px 0px var(--cor-texto-principal); /* Sombra dura e deslocada */
+  transition: all 0.2s ease-in-out;
 }
 .dashboard-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--sombra-suave);
+  transform: translate(-4px, -4px); /* Efeito de "levantar" */
+  box-shadow: 8px 8px 0px var(--cor-texto-principal);
 }
 .card-total {
   font-size: 2.2rem;
   font-weight: bold;
-  color: var(--cor-primaria);
+  color: var(--cor-texto-principal); /* Cor mais escura para melhor contraste */
   display: block;
   margin-top: 10px;
   text-align: center;
