@@ -282,33 +282,53 @@ def delete_checklist_item(current_user, item_id):
     db.session.commit()
     return jsonify({'message': 'Item removido.'})
 
-@api.route('/enxoval', methods=['GET'])
-@token_required
-def get_enxoval_items(current_user):
-    items = EnxovalItem.query.filter_by(user_id=current_user.id).all()
-    if not items:
-        TEMPLATE_ENXOVAL = {
-            "Roupas": ["Body manga curta (6)", "Body manga longa (6)", "Mijão (culote) (6)"],
-            "Higiene": ["Fraldas RN ou P", "Lenços umedecidos", "Pomada para assaduras"],
-            "Quarto": ["Berço", "Colchão", "Jogo de lençol para berço (3)"],
-            "Passeio": ["Bebê conforto para o carro", "Carrinho de bebê"]
-        }
-        for categoria, lista_itens in TEMPLATE_ENXOVAL.items():
-            for nome_item in lista_itens:
-                novo_item = EnxovalItem(item=nome_item, categoria=categoria, user_id=current_user.id)
-                db.session.add(novo_item)
-        db.session.commit()
-        items = EnxovalItem.query.filter_by(user_id=current_user.id).all()
-    return jsonify([{'id': i.id, 'item': i.item, 'categoria': i.categoria, 'concluido': i.concluido} for i in items])
+# --- ROTAS DO CHECKLIST DE ENXOVAL (PROTEGIDAS) ---
 
+TEMPLATE_ENXOVAL = {
+    # ... (o template que já existe aqui)
+}
+
+@api.route('/enxoval', methods=['GET'])
+@login_required
+def get_enxoval_items(current_user):
+    # ... (código existente, sem mudanças)
+    
 @api.route('/enxoval/<int:item_id>', methods=['PUT'])
-@token_required
+@login_required
 def update_enxoval_item(current_user, item_id):
+    # ... (código existente, sem mudanças)
+
+# --- ADICIONE AS DUAS ROTAS ABAIXO ---
+
+@api.route('/enxoval', methods=['POST'])
+@login_required
+def add_enxoval_item(current_user):
+    data = request.get_json()
+    if not data or not data.get('item') or not data.get('categoria'):
+        return jsonify({'message': 'O nome e a categoria do item são obrigatórios.'}), 400
+    
+    novo_item = EnxovalItem(
+        item=data['item'],
+        categoria=data['categoria'],
+        user_id=current_user.id
+    )
+    db.session.add(novo_item)
+    db.session.commit()
+    
+    return jsonify({
+        'id': novo_item.id, 
+        'item': novo_item.item, 
+        'categoria': novo_item.categoria, 
+        'concluido': novo_item.concluido
+    }), 201
+
+@api.route('/enxoval/<int:item_id>', methods=['DELETE'])
+@login_required
+def delete_enxoval_item(current_user, item_id):
     item = db.session.get(EnxovalItem, item_id)
     if not item or item.user_id != current_user.id:
         return jsonify({'message': 'Item não encontrado ou não autorizado.'}), 404
-    data = request.get_json()
-    if 'concluido' in data:
-        item.concluido = data['concluido']
+        
+    db.session.delete(item)
     db.session.commit()
-    return jsonify({'message': 'Item do enxoval atualizado.'})
+    return jsonify({'message': 'Item do enxoval removido com sucesso.'})
