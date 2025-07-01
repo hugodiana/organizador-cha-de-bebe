@@ -23,13 +23,20 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     login_manager.init_app(app)
 
+    # --- CORREÇÃO ESTÁ AQUI ---
+    # Adicionamos a URL do seu site Vercel à lista de origens permitidas.
     cors.init_app(
         app, 
-        resources={r"/api/*": {"origins": "http://localhost:5173"}}, 
+        resources={r"/api/*": {
+            "origins": [
+                "http://localhost:5173", 
+                "https://organizador-cha-de-bebe.vercel.app"
+            ]
+        }}, 
         supports_credentials=True
     )
+    # --------------------------
 
-    # Vamos registrar as rotas aqui em breve
     from app.routes import api as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api')
 
