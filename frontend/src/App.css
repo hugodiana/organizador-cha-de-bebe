@@ -38,25 +38,25 @@ h3 {
 }
 
 /* ===== 2. BARRA DE NAVEGAÇÃO (NAVBAR) ===== */
-/* (Estilos da Navbar que já funcionam bem, sem alterações) */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 15px;
-  margin-bottom: 20px;
+  padding: 10px 0; /* Ajuste no padding */
   border-bottom: 2px solid var(--cor-fundo);
+  position: relative; /* Necessário para o menu mobile */
 }
-.nav-left {
+.nav-left, .nav-right {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 20px;
 }
 .navbar-logo {
   font-family: 'Pacifico', cursive;
   font-size: 1.8rem;
   color: var(--cor-primaria);
   margin: 0;
+  text-decoration: none;
 }
 .nav-links {
   display: flex;
@@ -72,7 +72,6 @@ h3 {
 }
 .navbar a:hover {
   background-color: #f0f4ff;
-  color: #6a8dff;
 }
 .nav-links a.active {
   background-color: var(--cor-primaria);
@@ -101,14 +100,14 @@ h3 {
 }
 .dropdown-menu {
   position: absolute;
-  top: 110%;
+  top: 120%;
   right: 0;
   background-color: var(--cor-branco);
   border-radius: 8px;
   box-shadow: var(--sombra-suave);
   border: 1px solid #eee;
   width: 180px;
-  z-index: 10;
+  z-index: 1000;
   overflow: hidden;
 }
 .dropdown-menu a {
@@ -121,6 +120,50 @@ h3 {
 .dropdown-menu a:last-child {
   border-top: 1px solid var(--cor-fundo);
   color: var(--cor-erro);
+}
+.mobile-menu-toggle {
+  display: none; /* Escondido no desktop */
+  font-size: 1.8rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+/* ===== 6. RESPONSIVIDADE (PARA CELULARES) ===== */
+@media (max-width: 950px) { /* Ponto de quebra ajustado */
+  /* Esconde os links do topo e mostra o botão hambúrguer */
+  .nav-links {
+    display: none;
+  }
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  /* Estilo do menu quando aberto no mobile */
+  .nav-links.mobile-open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 65px; /* Posição abaixo da navbar */
+    left: 0;
+    width: 100%;
+    background-color: var(--cor-branco);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 10px 0;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+  .nav-links.mobile-open a {
+    text-align: center;
+    padding: 15px;
+    width: 100%;
+    border-bottom: 1px solid var(--cor-fundo);
+    border-radius: 0;
+  }
+  .nav-links.mobile-open a:last-child {
+    border-bottom: none;
+  }
 }
 
 /* ===== 3. DASHBOARD (BENTO GRID E NEUBRUTALISMO) ===== */
