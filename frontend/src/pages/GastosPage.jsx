@@ -106,30 +106,51 @@ function GastosPage() {
       <div className="form-container">
         <h3>Adicionar Novo Gasto</h3>
         <form onSubmit={handleAddGasto}>
-          <input type="text" value={descricao} onChange={e => setDescricao(e.target.value)} placeholder="Descrição (ex: Bolo e doces)" required />
-          <input type="text" value={fornecedor} onChange={e => setFornecedor(e.target.value)} placeholder="Fornecedor (ex: Doce Sabor)" />
-          <input type="number" value={valor} onChange={e => setValor(e.target.value)} placeholder="Valor (ex: 450.00)" step="0.01" required />
-          <select value={metodoPagamento} onChange={e => setMetodoPagamento(e.target.value)}>
-            <option>Pix</option>
-            <option>Cartão de Crédito</option>
-            <option>Débito</option>
-            <option>Dinheiro</option>
-            <option>Outro</option>
-          </select>
-          {/* CAMPO DE CATEGORIA ADICIONADO */}
-          <select value={categoria} onChange={e => setCategoria(e.target.value)}>
-            <option>Outros</option>
-            <option>Decoração</option>
-            <option>Buffet/Comida</option>
-            <option>Lembrancinhas</option>
-            <option>Local</option>
-            <option>Bebidas</option>
-          </select>
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Adicionando...' : 'Adicionar Gasto'}
-          </button>
-        </form>
+    <div className="form-group full-width">
+      <label htmlFor="descricao">Descrição</label>
+      <input id="descricao" type="text" value={descricao} onChange={e => setDescricao(e.target.value)} placeholder="Ex: Bolo e doces" required />
+    </div>
+    <div className="form-group full-width">
+      <label htmlFor="fornecedor">Fornecedor (Opcional)</label>
+      <input id="fornecedor" type="text" value={fornecedor} onChange={e => setFornecedor(e.target.value)} placeholder="Ex: Doce Sabor" />
+    </div>
+
+    {/* Esta grade vai organizar os próximos campos em colunas */}
+    <div className="form-grid">
+      <div className="form-group">
+        <label htmlFor="valor">Valor (R$)</label>
+        <input id="valor" type="number" value={valor} onChange={e => setValor(e.target.value)} placeholder="450,00" step="0.01" required />
       </div>
+
+      <div className="form-group">
+        <label htmlFor="metodoPagamento">Método de Pagamento</label>
+        <select id="metodoPagamento" value={metodoPagamento} onChange={e => setMetodoPagamento(e.target.value)}>
+          <option>Pix</option>
+          <option>Cartão de Crédito</option>
+          <option>Débito</option>
+          <option>Dinheiro</option>
+          <option>Outro</option>
+        </select>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="categoria">Categoria</label>
+        <select id="categoria" value={categoria} onChange={e => setCategoria(e.target.value)}>
+          <option>Outros</option>
+          <option>Decoração</option>
+          <option>Buffet/Comida</option>
+          <option>Lembrancinhas</option>
+          <option>Local</option>
+          <option>Bebidas</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" disabled={isSubmitting}>
+      {isSubmitting ? 'Adicionando...' : 'Adicionar Gasto'}
+    </button>
+  </form>
+</div>
 
       <div className="gastos-list">
         <h3>Histórico de Gastos</h3>

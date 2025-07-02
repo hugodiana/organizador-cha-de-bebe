@@ -801,3 +801,61 @@ button, .btn {
   height: 100%;
   color: var(--cor-texto-secundario);
 }
+
+/* === APRIMORAMENTOS DE ESTILO - GASTOS E FORMULÁRIOS === */
+
+/* Adiciona um rótulo (label) acima de cada campo do formulário */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--cor-texto-secundario);
+}
+
+/* Cria a grade para organizar os campos menores */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+/* Ocupa a largura total (para descrição e fornecedor) */
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+/* --- Refinamentos da Tabela --- */
+.gastos-list table {
+  margin-top: 30px;
+}
+
+.gastos-list th {
+  color: var(--cor-texto-secundario);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gastos-list tbody tr:hover {
+  background-color: #fafbff; /* Efeito suave ao passar o mouse */
+}
+
+.gastos-list td {
+  color: var(--cor-texto-principal);
+  font-weight: 500;
+}
+
+/* Alinha a coluna de valor à direita para melhor visualização */
+.gastos-list td:nth-child(4), .gastos-list th:nth-child(4) {
+  text-align: right;
+}
+
+/* Alinha a coluna de ação no centro */
+.gastos-list td:nth-child(6), .gastos-list th:nth-child(6) {
+  text-align: center;
+}
