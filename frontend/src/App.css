@@ -1,45 +1,13 @@
-/* ===== VARIÁVEIS GLOBAIS ===== */
+/* ===== VARIÁVEIS GLOBAIS (do index.css) - Colocando aqui para referência =====
 :root {
-  /* Cores Principais */
-  --cor-primaria: #8bd450; /* Verde bebê */
-  --cor-secundaria: #ff9bb3; /* Rosa bebê */
-  --cor-terciaria: #89cff0; /* Azul bebê */
-  --cor-erro: #ff6b6b;
-  --cor-sucesso: #66bb6a;
-  --cor-alerta: #ffcc00;
-
-  /* Tons Neutros */
-  --cor-texto-principal: #4a4a4a;
-  --cor-texto-secundario: #777;
-  --cor-branco: #ffffff;
-  --cor-fundo: #f8f9fa;
-  --cor-borda: rgba(0, 0, 0, 0.1);
-
-  /* Efeitos */
-  --sombra-suave: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --sombra-destaque: 0 8px 15px rgba(0, 0, 0, 0.15);
-  --borda-suave: 1px solid var(--cor-borda);
-  --transicao-padrao: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-
-  /* Tipografia */
-  --fonte-titulo: 'Pacifico', cursive;
-  --fonte-texto: 'Nunito', sans-serif;
+  --cor-primaria: #8EC5FC; --cor-secundaria: #E0C3FC; --cor-fundo: #f0f2f5;
+  --cor-texto: #333; --cor-texto-claro: #555; --cor-branco: #ffffff;
+  --cor-sucesso: #4caf50; --cor-erro: #f44336;
+  --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
+*/
 
-/* ===== RESET E ESTILOS GERAIS ===== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: var(--fonte-texto);
-  line-height: 1.6;
-  background-color: #fff9fb;
-  color: var(--cor-texto-principal);
-}
-
+/* === 1. LAYOUT PRINCIPAL E TÍTULOS === */
 .App {
   max-width: 950px;
   margin: 40px auto;
@@ -47,82 +15,47 @@ body {
   background-color: var(--cor-branco);
   border-radius: 16px;
   box-shadow: var(--sombra-suave);
-  position: relative;
-  overflow: hidden;
 }
-
-.App::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 8px;
-  background: linear-gradient(90deg, var(--cor-primaria), var(--cor-secundaria), var(--cor-terciaria));
-}
-
-.content {
-  margin-top: 30px;
-}
-
-h1, h2, h3, h4 {
-  font-family: var(--fonte-titulo);
-  font-weight: 400;
-  color: var(--cor-texto-principal);
-}
-
-h1 {
-  font-size: 2.5rem;
-  text-align: center;
-  margin-bottom: 20px;
-  color: var(--cor-primaria);
-}
-
+.content { margin-top: 30px; }
 h2 {
-  font-size: 2rem;
-  color: var(--cor-secundaria);
-  border-bottom: 2px solid var(--cor-terciaria);
+  color: var(--cor-primaria);
+  border-bottom: 2px solid var(--cor-secundaria);
   padding-bottom: 10px;
   margin-bottom: 30px;
   text-align: center;
+  font-weight: 600;
 }
-
 h3 {
-  font-size: 1.5rem;
   color: var(--cor-texto-secundario);
   margin-top: 30px;
   margin-bottom: 15px;
   text-align: left;
+  font-weight: 600;
 }
 
-/* === Barra de Navegação (Navbar) ATUALIZADA === */
+/* === 2. BARRA DE NAVEGAÇÃO === */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-bottom: 15px;
-  margin-bottom: 20px;
   border-bottom: 2px solid var(--cor-fundo);
 }
-
 .nav-left {
   display: flex;
   align-items: center;
   gap: 30px;
 }
-
 .navbar-logo {
-  font-family: 'Pacifico', cursive; /* Usa a fonte lúdica */
+  font-family: 'Pacifico', cursive;
   font-size: 1.8rem;
   color: var(--cor-primaria);
   margin: 0;
 }
-
 .nav-links {
   display: flex;
   gap: 10px;
 }
-
 .navbar a {
   text-decoration: none;
   color: var(--cor-texto-secundario);
@@ -131,23 +64,17 @@ h3 {
   border-radius: 8px;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
-
 .navbar a:hover {
   background-color: #f0f4ff;
   color: #6a8dff;
 }
-
-/* ESTILO PARA O LINK ATIVO */
 .nav-links a.active {
   background-color: var(--cor-primaria);
   color: var(--cor-branco);
 }
-
-/* --- ESTILOS DO MENU DROPDOWN --- */
 .nav-auth {
-  position: relative; /* Necessário para o posicionamento do dropdown */
+  position: relative;
 }
-
 .user-menu-button {
   background: transparent;
   border: none;
@@ -166,1709 +93,212 @@ h3 {
 .user-menu-button .dropdown-arrow {
   font-size: 0.7rem;
 }
-
 .dropdown-menu {
   position: absolute;
-  top: 110%; /* Aparece logo abaixo do botão */
+  top: 110%;
   right: 0;
   background-color: var(--cor-branco);
   border-radius: 8px;
   box-shadow: var(--sombra-suave);
-  border: var(--borda-suave);
+  border: 1px solid #eee;
   width: 180px;
   z-index: 10;
-  overflow: hidden; /* Garante que os itens respeitem o border-radius */
+  overflow: hidden;
 }
-
 .dropdown-menu a {
   display: block;
   width: 100%;
   text-align: left;
   padding: 12px 15px;
-  border-radius: 0; /* Remove o border-radius dos links individuais */
+  border-radius: 0;
 }
-
 .dropdown-menu a:last-child {
   border-top: 1px solid var(--cor-fundo);
   color: var(--cor-erro);
 }
-.dropdown-menu a:hover {
-  background-color: var(--cor-primaria);
-  color: var(--cor-branco);
-}
 
-/* ===== FORMULÁRIOS ===== */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
-  padding: 25px;
-  background-color: #fafbff;
-  border: var(--borda-suave);
-  border-radius: 8px;
-  position: relative;
-}
-
-.form-header {
-  margin-bottom: 10px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-row {
-  display: flex;
-  gap: 15px;
-}
-
-.form-row .form-group {
-  flex: 1;
-}
-
-label {
-  font-weight: 600;
-  color: var(--cor-texto-secundario);
-  font-size: 0.9rem;
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: 12px;
-  border: var(--borda-suave);
-  border-radius: 8px;
-  font-size: 1rem;
-  font-family: var(--fonte-texto);
-  transition: var(--transicao-padrao);
-}
-
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--cor-primaria);
-  box-shadow: 0 0 0 3px rgba(139, 212, 80, 0.2);
-}
-
-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-/* ===== BOTÕES ===== */
-button, .btn {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transicao-padrao);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
-  color: var(--cor-branco);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--sombra-destaque);
-}
-
-.btn-secondary {
-  background-color: white;
-  color: var(--cor-primaria);
-  border: 1px solid var(--cor-primaria);
-}
-
-.btn-secondary:hover {
-  background-color: rgba(139, 212, 80, 0.1);
-}
-
-.btn-danger {
-  background-color: var(--cor-erro);
-  color: white;
-}
-
-.btn-danger:hover {
-  background-color: #e05555;
-  transform: translateY(-2px);
-}
-
-.btn-sm {
-  padding: 8px 12px;
-  font-size: 0.9rem;
-}
-
-.btn-icon {
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border-radius: 50%;
-}
-
-/* ===== COMPONENTES ESPECÍFICOS ===== */
-
-/* Dashboard Cards */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 25px;
-  margin-top: 20px;
-}
-
-.dashboard-card {
-  background-color: white;
-  padding: 25px;
-  border-radius: 12px;
-  border: 2px solid var(--cor-texto-principal);
-  box-shadow: 4px 4px 0px var(--cor-texto-principal);
-  transition: var(--transicao-padrao);
-  height: 100%;
-}
-
-.dashboard-card:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: 8px 8px 0px var(--cor-texto-principal);
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.card-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: rgba(139, 212, 80, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--cor-primaria);
-}
-
-.card-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-}
-
-.card-value {
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: var(--cor-texto-principal);
-  text-align: center;
-  margin: 15px 0;
-}
-
-.card-footer {
-  font-size: 0.9rem;
-  color: var(--cor-texto-secundario);
-  text-align: center;
-}
-
-/* Listas */
-.list-container {
-  background-color: white;
-  border-radius: 8px;
-  border: var(--borda-suave);
-  overflow: hidden;
-}
-
-.list-header {
-  padding: 15px;
-  background-color: var(--cor-fundo);
-  border-bottom: var(--borda-suave);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.list-title {
-  font-weight: 600;
-  color: var(--cor-texto-principal);
-}
-
-.list-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.list-item {
-  padding: 15px;
-  border-bottom: var(--borda-suave);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: var(--transicao-padrao);
-}
-
-.list-item:hover {
-  background-color: rgba(139, 212, 80, 0.05);
-}
-
-.list-item:last-child {
-  border-bottom: none;
-}
-
-.list-item-content {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.list-item-actions {
-  display: flex;
-  gap: 8px;
-}
-
-/* Modal */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-}
-
-.modal-content {
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: var(--sombra-destaque);
-  width: 100%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  animation: modalFadeIn 0.3s ease-out;
-}
-
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.modal-header {
-  padding: 20px;
-  border-bottom: var(--borda-suave);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--cor-texto-principal);
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: var(--cor-texto-secundario);
-  transition: var(--transicao-padrao);
-}
-
-.modal-close:hover {
-  color: var(--cor-erro);
-  transform: rotate(90deg);
-}
-
-.modal-body {
-  padding: 20px;
-}
-
-.modal-footer {
-  padding: 20px;
-  border-top: var(--borda-suave);
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-
-/* ===== COMPONENTES DO CHÁ DE BEBÊ ===== */
-
-/* Contagem Regressiva */
-.countdown-container {
-  text-align: center;
-  margin: 30px 0;
-}
-
-.countdown-title {
-  font-size: 1.2rem;
-  color: var(--cor-texto-secundario);
-  margin-bottom: 10px;
-}
-
-.countdown-timer {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-.countdown-item {
-  background-color: var(--cor-primaria);
-  color: white;
-  padding: 15px;
-  border-radius: 8px;
-  min-width: 80px;
-}
-
-.countdown-value {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.countdown-label {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  opacity: 0.8;
-}
-
-/* Lista de Presentes */
-.gifts-container {
-  margin-top: 30px;
-}
-
-.gift-categories {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  overflow-x: auto;
-  padding-bottom: 10px;
-}
-
-.gift-category {
-  padding: 8px 15px;
-  border-radius: 20px;
-  background-color: var(--cor-fundo);
-  color: var(--cor-texto-secundario);
-  font-size: 0.9rem;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: var(--transicao-padrao);
-}
-
-.gift-category:hover, .gift-category.active {
-  background-color: var(--cor-primaria);
-  color: white;
-}
-
-.gifts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-.gift-card {
-  background-color: white;
-  border-radius: 8px;
-  border: var(--borda-suave);
-  overflow: hidden;
-  transition: var(--transicao-padrao);
-}
-
-.gift-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--sombra-destaque);
-}
-
-.gift-image {
-  height: 150px;
-  background-color: var(--cor-fundo);
-  background-size: cover;
-  background-position: center;
-  position: relative;
-}
-
-.gift-reserved {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: var(--cor-erro);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: bold;
-}
-
-.gift-details {
-  padding: 15px;
-}
-
-.gift-title {
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.gift-price {
-  color: var(--cor-primaria);
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.gift-description {
-  font-size: 0.9rem;
-  color: var(--cor-texto-secundario);
-  margin-bottom: 15px;
-}
-
-.gift-actions {
-  display: flex;
-  gap: 10px;
-}
-
-/* ===== RESPONSIVIDADE ===== */
-@media (max-width: 768px) {
-  .App {
-    margin: 10px;
-    padding: 15px;
-    border-radius: 12px;
-  }
-
-  .navbar {
-    flex-direction: column;
-    gap: 15px;
-    padding-bottom: 15px;
-  }
-
-  .nav-links {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .form-row {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .countdown-timer {
-    flex-wrap: wrap;
-  }
-
-  .gifts-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .App {
-    padding: 15px 10px;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-  }
-
-  .modal-content {
-    max-width: 100%;
-    border-radius: 0;
-  }
-}
-
-/* ===== ANIMAÇÕES ===== */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in {
-  animation: fadeIn 0.5s ease-out;
-}
-
-.slide-up {
-  animation: slideUp 0.5s ease-out;
-}
-
-/* ===== UTILITÁRIOS ===== */
-.text-center {
-  text-align: center;
-}
-
-.mt-1 { margin-top: 10px; }
-.mt-2 { margin-top: 20px; }
-.mt-3 { margin-top: 30px; }
-.mt-4 { margin-top: 40px; }
-
-.mb-1 { margin-bottom: 10px; }
-.mb-2 { margin-bottom: 20px; }
-.mb-3 { margin-bottom: 30px; }
-.mb-4 { margin-bottom: 40px; }
-
-.p-1 { padding: 10px; }
-.p-2 { padding: 20px; }
-.p-3 { padding: 30px; }
-.p-4 { padding: 40px; }
-
-.hidden {
-  display: none;
-}
-
-/* ===== ESTADOS ===== */
-.is-loading {
-  position: relative;
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-.is-loading::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* === Estilos Adicionais para o Dashboard com Gráfico === */
-.resumo-gastos-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 20px;
-}
-.resumo-numeros {
-  flex: 1;
-  min-width: 200px;
-  text-align: center;
-}
-.resumo-grafico {
-  flex: 1.5;
-  min-width: 250px;
-  height: 200px;
-}
-.card-link {
-  display: inline-block;
-  margin-top: 15px;
-  font-weight: bold;
-  color: var(--cor-primaria);
-  text-decoration: none;
-}
-.grafico-vazio {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: var(--cor-texto-secundario);
-}
-
-/* === APRIMORAMENTOS DE ESTILO - GASTOS E FORMULÁRIOS === */
-
-/* Adiciona um rótulo (label) acima de cada campo do formulário */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.form-group label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--cor-texto-secundario);
-}
-
-/* Cria a grade para organizar os campos menores */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 15px;
-}
-
-/* Ocupa a largura total (para descrição e fornecedor) */
-.form-group.full-width {
-  grid-column: 1 / -1;
-}
-
-/* === APRIMORAMENTOS DE ESTILO - GASTOS E FORMULÁRIOS === */
-
-/* Adiciona um rótulo (label) acima de cada campo do formulário */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.form-group label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--cor-texto-secundario);
-}
-
-/* Cria a grade para organizar os campos menores */
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 15px;
-}
-
-/* Ocupa a largura total (para descrição e fornecedor) */
-.form-group.full-width {
-  grid-column: 1 / -1;
-}
-
-/* --- ESTILOS CORRIGIDOS E REFINADOS DA TABELA DE GASTOS --- */
-.gastos-list table {
-  width: 100%;
-  border-collapse: collapse; /* Remove espaços entre as bordas */
-  margin-top: 30px;
-  table-layout: fixed; /* Ajuda a controlar a largura das colunas */
-}
-
-/* Estilo do cabeçalho da tabela */
-.gastos-list th {
-  color: var(--cor-texto-secundario);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  text-align: left;
-  padding: 12px 15px;
-  border-bottom: 2px solid #eee;
-}
-
-/* Estilo das células da tabela */
-.gastos-list td {
-  color: var(--cor-texto-principal);
-  font-weight: 500;
-  padding: 15px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-/* Efeito suave ao passar o mouse sobre as linhas */
-.gastos-list tbody tr:hover {
-  background-color: #fafbff;
-}
-
-/* Alinhamentos e larguras específicas das colunas */
-.gastos-list th:nth-child(3),
-.gastos-list td:nth-child(3) {
-  text-align: right; /* Alinha Valor (R$) à direita */
-}
-
-.gastos-list th:nth-child(5),
-.gastos-list td:nth-child(5) {
-  text-align: center; /* Alinha Ação no centro */
-  width: 10%; /* Define uma largura menor para a coluna de ação */
-}
-
-
-/* --- SEÇÃO RESPONSIVA (PARA CELULARES) --- */
-/* Garante que estes estilos só se apliquem em telas pequenas */
-@media (max-width: 768px) {
-  /* ... (outras regras responsivas que já estão aí) ... */
-  
-  /* --- MÁGICA DA TABELA RESPONSIVA --- */
-  .gastos-list table, 
-  .gastos-list thead, 
-  .gastos-list tbody, 
-  .gastos-list th, 
-  .gastos-list td, 
-  .gastos-list tr {
-    display: block;
-  }
-
-  .gastos-list thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-
-  .gastos-list tr {
-    border: 1px solid #ccc;
-    margin-bottom: 15px;
-    border-radius: 8px;
-  }
-
-  .gastos-list td {
-    border: none;
-    border-bottom: 1px solid #eee;
-    position: relative;
-    padding-left: 50%;
-    text-align: right;
-    min-height: 30px; /* Garante altura mínima */
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-  }
-  
-  .gastos-list td:before {
-    content: attr(data-label); /* Usa o atributo data-label que adicionaremos no JSX */
-    position: absolute;
-    top: 50%;
-    left: 15px;
-    transform: translateY(-50%);
-    width: 45%;
-    padding-right: 10px;
-    white-space: nowrap;
-    text-align: left;
-    font-weight: bold;
-    color: var(--cor-texto-secundario);
-  }
-
-  /* Esconde a coluna de fornecedor no celular para economizar espaço (opcional) */
-  .gastos-list td:nth-of-type(2) {
-    display: none;
-  }
-}
-
-/* Alinha a coluna de valor à direita para melhor visualização */
-.gastos-list td:nth-child(4), .gastos-list th:nth-child(4) {
-  text-align: right;
-}
-
-/* Alinha a coluna de ação no centro */
-.gastos-list td:nth-child(6), .gastos-list th:nth-child(6) {
-  text-align: center;
-}
-
-* --- Lista de Convidados (REFINADO) --- */
-.convidados-list > ul {
-  list-style: none; /* Remove os bullets padrão da lista */
-  padding: 0;
-  margin-top: 20px;
-}
-
-.convidado-item {
-  display: flex;
-  align-items: center;
-  padding: 12px 15px;
-  background-color: var(--cor-branco);
-  border: 1px solid #e8eaf0;
-  border-radius: 8px;
-  margin-bottom: 8px; /* Reduz um pouco o espaçamento */
-  transition: box-shadow 0.2s ease;
-}
-
-.convidado-item:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-/* Indentação e estilo para familiares */
-.convidado-item.familiar {
-  margin-left: 30px; /* Aumenta a indentação */
-  background-color: #fdfdff;
-  border-left: 3px solid var(--cor-fundo); /* Adiciona uma linha para indicar familiar */
-}
-
-.convidado-info {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Reduz um pouco o espaço entre checkbox e nome */
-  flex-grow: 1; /* Permite que o nome ocupe mais espaço */
-}
-
-.convidado-info label {
-  font-weight: 600;
-  color: var(--cor-texto-principal);
-  cursor: pointer;
-  flex-grow: 1; /* Permite que o label (nome) cresça */
-  overflow: hidden; /* Evita que nomes longos quebrem o layout */
-  text-overflow: ellipsis; /* Adiciona "..." para nomes longos */
-  white-space: nowrap;
-}
-
-.convidado-info label.confirmado {
-  text-decoration: line-through;
-  color: var(--cor-texto-secundario);
-}
-
-.convidado-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px; /* Reduz um pouco o espaço entre os botões */
-}
-
-.action-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem; /* Reduz o tamanho dos ícones */
-  padding: 4px; /* Reduz o preenchimento */
-  border-radius: 50%;
-  width: 24px; /* Reduz o tamanho dos botões */
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
-}
-
-.action-btn:hover {
-  background-color: #f0f4ff;
-}
-
-.add-family-btn {
-  color: var(--cor-primaria);
-  font-size: 1.2rem; /* Mantém o tamanho maior do "+" */
-}
-
-/* Estilos para o formulário de adicionar familiar (mantendo simples) */
-.add-membro-form {
-  display: flex;
-  gap: 8px;
-  margin-left: 30px; /* Alinha com os familiares */
-  margin-top: 5px;
-  margin-bottom: 10px;
-}
-
-.add-membro-form input {
-  flex-grow: 1;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
-
-.add-membro-form button {
-  background-color: var(--cor-primaria);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.add-membro-form button:hover {
-  background-color: var(--cor-primaria-hover);
-}
-
-/* Remove o estilo de lista padrão da ul principal dentro de .convidados-list */
-.convidados-list > ul > li {
-  list-style-type: none;
-}
-
-/* Estilo para o ícone de remover (mais consistente) */
-.remove-btn.mini {
-  font-size: 1rem;
-  width: 24px;
-  height: 24px;
-  line-height: 20px;
-  padding: 0;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--cor-erro);
-  border: 1px solid var(--cor-erro);
-  background-color: transparent;
-}
-
-.remove-btn.mini:hover {
-  background-color: rgba(255, 0, 0, 0.1);
-}
-
-/* Alinha o conteúdo principal do convidado */
-.convidados-list > ul > li > .convidado-item.principal {
-  padding-left: 15px; /* Compensação para o possível bullet */
-}
-
-/* Ajuste fino para o espaçamento do checkbox */
-.convidado-info input {
-  margin-right: 8px;
-}
-
-/* Espaçamento entre os grupos de convidados (principal + família) */
-.convidados-list > ul > li {
-  margin-bottom: 15px;
-}
-
-/* Garante que o filtro de busca não fique colado na lista */
-.convidados-list > h3 + .filter-container {
-  margin-top: 15px;
-}
-
-.filter-container {
-  margin-bottom: 15px;
-}
-
-/* Garante um pequeno espaço acima do formulário de adicionar convidado principal */
-.convidados-container > .form-container {
-  margin-top: 20px;
-}
-
-/* Estilo para a div que contém o form de adicionar familiar */
-.convidados-list > ul > li > .familiar {
-  margin-left: 0; /* Resetando qualquer margem */
-  padding-left: 30px; /* Indentando o formulário */
-}
-
-/* Esconde o marcador de lista padrão para o convidado principal também */
-.convidados-list > ul > li > .convidado-item.principal::before {
-  content: none;
-}
-
-/* Ajuste para alinhar o checkbox do familiar */
-.convidado-item.familiar .convidado-info input {
-  margin-left: 15px; /* Para alinhar com a indentação */
-}
-
-/* Reduz a margem inferior do último item da lista */
-.convidados-list > ul > li:last-child {
-  margin-bottom: 0;
-}
-
-/* Estilo para a div que envolve o checkbox e o label (melhor controle do layout) */
-.convidado-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%; /* Garante que ocupe a largura disponível */
-}
-
-/* Estilo para o label (nome) para ocupar o espaço restante */
-.convidado-info label {
-  flex-grow: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Ajuste fino no espaçamento do checkbox */
-.convidado-item > input {
-  margin-right: 10px; /* Espaço entre o "bullet" (se ainda visível) e o checkbox */
-}
-
-/* Certifica-se de que o flex container principal alinhe tudo corretamente */
-.convidado-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Distribui o espaço entre info e actions */
-}
-
-/* Ajuste para o checkbox ficar mais à esquerda */
-.convidado-item > input {
-  margin-right: 15px;
-  flex-shrink: 0; /* Impede que o checkbox encolha */
-}
-
-/* Alinha o bloco de informações (checkbox + label) à esquerda */
-.convidado-info {
-  display: flex;
-  align-items: center;
-  flex-grow: 1;
-}
-
-/* Garante que o label não fique muito colado no checkbox */
-.convidado-info label {
-  margin-left: 5px;
-}
-
-/* Alinha as ações (botões) à direita */
-.convidado-actions {
-  flex-shrink: 0; /* Impede que os botões encolham */
-}
-
-
-/* --- Checklist de Organização e Enxoval --- (Estilos gerais) */
-.checklist-container .checklist,
-.enxoval-container .enxoval-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
-}
-
-.checklist-container .checklist li,
-.enxoval-container .enxoval-list li {
-  display: flex;
-  align-items: center;
-  padding: 10px 15px;
-  background-color: var(--cor-branco);
-  border: 1px solid #e8eaf0;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  transition: box-shadow 0.2s ease;
-}
-
-.checklist-container .checklist li:hover,
-.enxoval-container .enxoval-list li:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.checklist-container .checklist li input,
-.enxoval-container .enxoval-list li input {
-  margin-right: 15px;
-}
-
-.checklist-container .checklist li .editable-span,
-.enxoval-container .enxoval-list li .item-name {
-  flex-grow: 1;
-  color: var(--cor-texto-principal);
-  font-weight: 500;
-  word-break: break-word; /* Evita que textos longos quebrem o layout */
-}
-
-.checklist-container .checklist li.concluido .editable-span,
-.enxoval-container .enxoval-list li.checked .item-name {
-  text-decoration: line-through;
-  color: var(--cor-texto-secundario);
-}
-
-.checklist-container .checklist li .remove-btn,
-.enxoval-container .enxoval-list li .remove-btn {
-  background: none;
-  border: none;
-  color: var(--cor-erro);
-  cursor: pointer;
-  font-size: 1.2rem;
-  margin-left: 15px;
-}
-
-.checklist-container .form-container,
-.enxoval-container .form-container {
-  margin-bottom: 20px;
-}
-
-.checklist-container .form-container input,
-.enxoval-container .form-container input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-right: 10px;
-  flex-grow: 1;
-}
-
-.checklist-container .form-container button,
-.enxoval-container .form-container button {
-  background-color: var(--cor-primaria);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.checklist-container .form-container button:hover,
-.enxoval-container .form-container button:hover {
-  background-color: var(--cor-primaria-hover);
-}
-
-.checklist-container .orcamento-status,
-.enxoval-container .orcamento-status {
-  margin-bottom: 20px;
-  color: var(--cor-texto-secundario);
-}
-
-.checklist-container .empty-state,
-.enxoval-container .empty-state {
-  text-align: center;
-  color: var(--cor-texto-secundario);
-  padding: 20px;
-  border: 1px dashed #ccc;
-  border-radius: 8px;
-  margin-top: 20px;
-}
-
-/* Estilo específico para o botão de remover acompanhante (menor) */
-.convidado-item.familiar .convidado-actions .remove-btn {
-  font-size: 1rem;
-  width: 24px;
-  height: 24px;
-  line-height: 20px;
-  padding: 0;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--cor-erro);
-  border: 1px solid var(--cor-erro);
-  background-color: transparent;
-  margin-left: 8px;
-}
-
-.convidado-item.familiar .convidado-actions .remove-btn:hover {
-  background-color: rgba(255, 0, 0, 0.1);
-}
-
-/* Garante que o form de adicionar familiar não fique muito colado no botão de remover */
-.convidado-item.principal + .familiar .add-membro-form {
-  margin-top: 10px;
-}
-
-/* Espaçamento entre o checkbox e o label na lista de convidados */
-.convidado-info > input {
-  margin-right: 12px;
-}
-
-/* Ajuste para o alinhamento vertical dos itens */
-.convidados-list > ul > li {
-  align-items: center;
-}
-
-/* Garante que o nome do convidado principal não fique muito colado no checkbox */
-.convidado-item.principal .convidado-info label {
-  margin-left: 5px;
-}
-
-/* Ajuste para o alinhamento do checkbox do familiar */
-.convidado-item.familiar .convidado-info > input {
-  margin-left: 25px; /* Alinha com a indentação */
-}
-
-/* Espaçamento entre o checkbox e o nome do familiar */
-.convidado-item.familiar .convidado-info label {
-  margin-left: 8px;
-}
-
-/* Reduz a margem inferior dos itens da lista para um visual mais agrupado */
-.convidados-list > ul > li {
-  margin-bottom: 5px;
-  padding: 10px 15px; /* Reduz um pouco o padding vertical */
-}
-
-/* Aumenta um pouco a margem inferior do último item de cada grupo */
-.convidados-list > ul > li > .familiar:last-child {
-  margin-bottom: 10px;
-}
-
-/* Espaçamento acima do formulário de adicionar convidado principal */
-.convidados-container > .form-container {
-  margin-top: 15px;
-  margin-bottom: 15px; /* Adiciona espaço abaixo também */
-}
-
-/* Estilo para a div que envolve o input e o label (controle do layout) */
-.convidado-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-grow: 1; /* Permite que o nome ocupe o espaço restante */
-}
-
-/* Estilo para o label (nome) para ocupar o espaço e evitar quebra */
-.convidado-info label {
-  flex-grow: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Garante que o checkbox não encolha */
-.convidado-info > input {
-  flex-shrink: 0;
-}
-
-/* Alinha o botão de remover no final da linha */
-.convidado-actions {
-  flex-shrink: 0; /* Impede que os botões encolham */
-  margin-left: auto; /* Empurra os botões para a direita */
-}
-
-/* Reduz um pouco o tamanho dos botões de ação */
-.action-btn {
-  font-size: 1rem;
-  width: 28px;
-  height: 28px;
-}
-
-/* Ajusta o tamanho do botão de adicionar familiar */
-.add-family-btn {
-  font-size: 1.1rem;
-  width: 28px;
-  height: 28px;
-}
-
-/* Garante que o form de adicionar familiar esteja bem posicionado */
-.convidados-list > ul > li > .familiar .add-membro-form {
-  margin-left: 35px;
-  margin-top: 2px;
-  margin-bottom: 8px;
-}
-
-/* Reduz a margem inferior dos itens principais */
-.convidados-list > ul > li > .convidado-item.principal {
-  margin-bottom: 2px;
-}
-
-/* Aumenta a margem inferior dos grupos familiares */
-.convidados-list > ul > li {
-  margin-bottom: 10px;
-}
-
-/* Reduz a margem superior do título da lista de convidados */
-.convidados-list > h3 {
-  margin-top: 15px;
-}
-
-/* Alinha o checkbox mais à esquerda */
-.convidado-item > input {
-  margin-right: 15px;
-}
-
-/* Espaçamento entre checkbox e label */
-.convidado-info label {
-  margin-left: 5px;
-}
-
-/* Alinha o botão de remover à direita */
-.convidado-actions {
-  margin-left: auto;
-}
-
-/* Reduz o tamanho do ícone de remover */
-.remove-btn.mini {
-  font-size: 0.9rem;
-  width: 22px;
-  height: 22px;
-  line-height: 18px;
-}
-
-/* Ajusta a indentação dos familiares */
-.convidado-item.familiar {
-  margin-left: 40px;
-}
-
-/* Espaçamento do form de adicionar familiar */
-.convidados-list > ul > li > .familiar .add-membro-form {
-  margin-left: 45px;
-  margin-top: 5px;
-  margin-bottom: 10px;
-}
-
-/* Espaçamento entre os itens principais e seus familiares */
-.convidados-list > ul > li > .convidado-item.principal + .familiar {
-  margin-top: 2px;
-}
-
-/* Reduz a margem inferior dos itens da lista */
-.convidados-list > ul > li {
-  margin-bottom: 3px;
-  padding: 8px 15px;
-}
-
-/* Aumenta a margem inferior dos grupos */
-.convidados-list > ul > li {
-  margin-bottom: 12px;
-}
-
-/* Ajuste fino no espaçamento do input */
-.convidado-info > input {
-  margin-right: 10px;
-}
-
-/* Espaçamento do label */
-.convidado-info label {
-  margin-left: 3px;
-}
-
-/* Reduz o tamanho dos botões */
-.action-btn, .remove-btn.mini, .add-family-btn {
-  width: 26px;
-  height: 26px;
-  font-size: 0.9rem;
-}
-
-.add-family-btn {
-  font-size: 1rem;
-}
-
-/* Ajuste na indentação e espaçamento do form de adicionar familiar */
-.convidados-list > ul > li > .familiar .add-membro-form {
-  margin-left: 50px;
-  margin-top: 3px;
-  margin-bottom: 8px;
-  gap: 5px;
-}
-
-.add-membro-form input {
-  padding: 6px;
-  font-size: 0.9rem;
-}
-
-.add-membro-form button {
-  padding: 6px 10px;
-  font-size: 0.9rem;
-}
-
-/* Reduz a margem inferior dos itens principais */
-.convidados-list > ul > li > .convidado-item.principal {
-  margin-bottom: 1px;
-  padding: 10px 15px;
-}
-
-/* Aumenta a margem inferior dos grupos */
-.convidados-list > ul > li {
-  margin-bottom: 10px;
-}
-
-
-/* --- Checklist de Organização e Enxoval --- (Estilos específicos) */
-.checklist-container .checklist li,
-.enxoval-container .enxoval-list li {
-  padding: 8px 15px;
-  margin-bottom: 5px;
-}
-
-.checklist-container .checklist li input,
-.enxoval-container .enxoval-list li input {
-  margin-right: 10px;
-}
-
-.checklist-container .checklist li .remove-btn,
-.enxoval-container .enxoval-list li .remove-btn {
-  font-size: 1rem;
-  margin-left: 10px;
-}
-
-/* Ajuste no espaçamento do form da checklist e enxoval */
-.checklist-container .form-container,
-.enxoval-container .form-container {
-  margin-bottom: 15px;
-}
-
-.checklist-container .form-container input,
-.enxoval-container .form-container input {
-  padding: 8px;
-  font-size: 0.9rem;
-}
-
-.checklist-container .form-container button,
-.enxoval-container .form-container button {
-  padding: 8px 12px;
-  font-size: 0.9rem;
-}
-
-/* Reduz a margem inferior do status */
-.checklist-container .orcamento-status,
-.enxoval-container .orcamento-status {
-  margin-bottom: 15px;
-}
-
-/* Ajuste no espaçamento da mensagem de lista vazia */
-.checklist-container .empty-state,
-.enxoval-container .empty-state {
-  padding: 15px;
-  margin-top: 15px;
-}
-
-/* Estilos específicos para a EditableText (se necessário) */
-.editable-input {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 6px;
-  font-size: 1rem;
-  font-family: 'Nunito', sans-serif;
-  width: 100%; /* Ocupa a largura disponível */
-  box-sizing: border-box; /* Inclui padding e border na largura */
-}
-
-.editable-span {
-  cursor: text;
-  padding: 2px 0;
-  display: inline-block; /* Para evitar quebra de linha estranha */
-}
-
-/* Estilo para o botão de remover na EditableText (se necessário) */
-.editable-span + .remove-btn {
-  margin-left: 8px;
-  font-size: 1rem;
-}
-
-/* --- Filtros (Compartilhados) --- */
-.filter-container {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  align-items: center;
-}
-
-.filter-container input,
-.filter-container select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-/* Estilos para o container principal das páginas (espaçamento geral) */
-.gastos-container,
-.convidados-container,
-.checklist-container,
-.enxoval-container,
-.meu-convite-container {
-  padding: 20px;
-}
-
-/* Estilos para os títulos h2 das páginas */
-.gastos-container h2,
-.convidados-container h2,
-.checklist-container h2,
-.enxoval-container h2,
-.meu-convite-container h2 {
-  margin-bottom: 20px;
-  color: var(--cor-primaria);
-}
-
-/* Estilos para os títulos h3 dentro dos containers */
-.gastos-container h3,
-.convidados-container h3,
-.checklist-container h3,
-.enxoval-container h3,
-.meu-convite-container h3 {
-  margin-top: 25px;
-  margin-bottom: 15px;
-  color: var(--cor-secundaria);
-}
-
-/* Estilo para a mensagem de orçamento/status */
-.orcamento-status {
-  color: var(--cor-texto-secundario);
-  margin-bottom: 15px;
-}
-
-.orcamento-status strong {
-  font-weight: bold;
-  color: var(--cor-texto-principal);
-}
-
-/* Estilo para o container do formulário */
+/* === 3. FORMULÁRIOS E BOTÕES === */
 .form-container {
-  background-color: #f9f9f9;
-  padding: 20px;
+  background-color: #fafbff;
+  padding: 25px;
+  border: 1px solid #eef2f7;
   border-radius: 8px;
-  border: 1px solid #eee;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
-
 .form-container h3 {
   margin-top: 0;
+  text-align: center;
 }
-
 .form-container form {
+  margin-top: 15px;
+}
+.form-group {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.form-container input,
-.form-container select {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-}
-
-.form-container button {
-  background-color: var(--cor-primaria);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.2s ease;
-}
-
-.form-container button:hover {
-  background-color: var(--cor-primaria-hover);
-}
-
-/* Estilo para a mensagem de estado vazio (listas) */
-.empty-state {
-  text-align: center;
-  padding: 20px;
-  color: var(--cor-texto-secundario);
-  border: 1px dashed #ccc;
-  border-radius: 8px;
-  margin-top: 15px;
-}
-
-/* Estilos para botões de ação (genéricos) */
-.action-btn, .remove-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.remove-btn {
-  color: var(--cor-erro);
-  font-size: 1.1rem;
-}
-
-.remove-btn:hover {
-  background-color: rgba(255, 0, 0, 0.1);
-}
-
-/* Estilos para o container principal da página */
-.convidados-container {
-  padding: 20px;
-}
-
-/* Título da página */
-.convidados-container h2 {
-  color: var(--cor-primaria);
-  margin-bottom: 20px;
-}
-
-/* Status (total e confirmados) */
-.convidados-container .orcamento-status {
-  color: var(--cor-texto-secundario);
+  gap: 5px;
   margin-bottom: 15px;
 }
-
-.convidados-container .orcamento-status strong {
-  font-weight: bold;
-  color: var(--cor-texto-principal);
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
 }
-
-/* Container do formulário de adicionar convidado principal */
-.convidados-container .form-container {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid #eee;
-  margin-bottom: 20px;
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--cor-texto-secundario);
 }
-
-.convidados-container .form-container h3 {
-  margin-top: 0;
-  color: var(--cor-secundaria);
-}
-
-.convidados-container .form-container form {
-  display: flex;
-  gap: 10px;
-}
-
-.convidados-container .form-container input {
-  padding: 10px;
+input[type="text"], input[type="number"], input[type="password"], input[type="email"], input[type="date"], select {
+  width: 100%;
+  padding: 12px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 1rem;
+  font-family: 'Nunito', sans-serif;
+}
+button[type="submit"] {
+  width: 100%;
+  padding: 12px 20px;
+  border: none;
+  background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+  color: var(--cor-branco);
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
+button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* === 4. LISTAS (Convidados, Checklist, etc.) === */
+.convidados-list ul, .checklist {
+  list-style-type: none;
+  padding: 0;
+}
+.grupo-familiar {
+  background-color: #fdfdff;
+  border: 1px solid #eef2f7;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  padding: 10px;
+}
+.linha-convidado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 5px;
+  width: 100%;
+}
+.linha-convidado.familiar {
+  margin-left: 30px;
+  padding-top: 10px;
+  border-top: 1px dashed #eef2f7;
+}
+.info-convidado {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   flex-grow: 1;
 }
-
-.convidados-container .form-container button {
-  background-color: var(--cor-primaria);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 15px;
+.info-convidado label {
+  font-weight: 600;
   cursor: pointer;
-  font-size: 1rem;
 }
-
-.convidados-container .form-container button:hover {
-  background-color: var(--cor-primaria-hover);
-}
-
-/* Container da lista de convidados */
-.convidados-list {
-  margin-top: 25px;
-}
-
-.convidados-list h3 {
-  color: var(--cor-secundaria);
-  margin-bottom: 15px;
-}
-
-/* Container do filtro de busca */
-.convidados-list .filter-container {
-  margin-bottom: 20px;
-}
-
-.convidados-list .filter-container input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%;
-  font-size: 1rem;
-}
-
-/* Lista de convidados (já estilizada acima) */
-
-/* Mensagem de lista vazia */
-.convidados-list .empty-state {
-  text-align: center;
-  padding: 20px;
+.info-convidado label.confirmado {
+  text-decoration: line-through;
   color: var(--cor-texto-secundario);
-  border: 1px dashed #ccc;
-  border-radius: 8px;
-  margin-top: 15px;
 }
-
-/* Estilo para o checkbox */
-.convidado-info input {
-  appearance: none;
-  background-color: #fff;
-  border: 1px solid #d9d9d9;
-  border-radius: 3px;
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  display: inline-flex;
+.info-convidado input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.acoes-convidado {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  outline: none;
+}
+.add-membro-form {
+  display: flex;
+  width: auto;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+}
+.add-membro-form input {
+  flex-grow: 1;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 0.9rem;
+}
+.add-membro-form button {
+  padding: 8px 12px !important;
+  font-size: 1rem !important;
+  font-weight: bold;
+  margin-top: 0 !important;
+  background: var(--cor-sucesso) !important;
 }
 
-.convidado-info input::before {
-  content: "";
-  width: 10px;
-  height: 10px;
-  background-color: var(--cor-primaria);
-  border-radius: 2px;
-  transform: scale(0);
-  transition: transform 0.2s ease-in-out;
+/* Estilo para Checklist e Enxoval */
+.checklist li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid var(--cor-fundo);
+}
+.checklist li.concluido .editable-span {
+  text-decoration: line-through;
+  color: var(--cor-texto-secundario);
+}
+.checklist li input[type="checkbox"] {
+  margin-right: 15px;
+  width: 20px;
+  height: 20px;
 }
 
-.convidado-info input:checked::before {
-  transform: scale(1);
+/* === 5. OUTROS COMPONENTES === */
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: #fafbff;
+  border-radius: 8px;
+  margin-top: 30px;
+  border: 2px dashed #e0e0e0;
 }
-
-.convidado-info input:focus-visible {
-  border-color: var(--cor-primaria);
-  box-shadow: 0 0 0 2px rgba(105, 179, 255, 0.4);
+.empty-state h3 {
+  border: none;
 }
-
-/* Ajuste fino para o espaçamento */
-.convidado
+.filter-container {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+.filter-container input {
+  flex-grow: 1;
+}
+.remove-btn {
+  border-radius: 50%;
+  border: none;
+  background-color: #fff1f1;
+  color: var(--cor-erro);
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+.remove-btn:hover {
+  background-color: var(--cor-erro);
+  color: var(--cor-branco);
+  transform: scale(1.1);
+}
