@@ -31,7 +31,7 @@ def token_required(f):
         return f(current_user, *args, **kwargs)
     return decorated
 
-# --- ROTAS DE AUTENTICAÇÃO COM TOKEN ---
+# --- ROTAS DE AUTENTICAÇÃO ---
 @api.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -62,7 +62,6 @@ def login():
         })
     return jsonify({'message': 'Credenciais inválidas.'}), 401
 
-# --- ROTA DE PERFIL (Valida o token) ---
 @api.route('/profile', methods=['GET'])
 @token_required
 def get_profile(current_user):
@@ -101,6 +100,7 @@ def personalizar_cha(current_user):
         current_user.data_cha = datetime.strptime(data['data_cha'], '%Y-%m-%d')
     else:
         current_user.data_cha = None
+        
     if data.get('local_cha'):
         current_user.local_cha = data['local_cha']
         
@@ -114,16 +114,27 @@ def get_dashboard_data(current_user):
     bebes = current_user.bebes.all()
     bebes_data = [{'nome': b.nome, 'sexo': b.sexo} for b in bebes]
     data_cha = current_user.data_cha.isoformat() if current_user.data_cha else None
-    total_gasto = db.session.query(func.sum(Gasto.valor)).filter(Gasto.user_id == current_user.id).scalar() or 0.0
+    
+    # Lógica para agrupar gastos por categoria
+    gastos_por_categoria = db.session.query(
+        Gasto.categoria, func.sum(Gasto.valor)
+    ).filter(Gasto.user_id == current_user.id).group_by(Gasto.categoria).all()
+    
+    resumo_gastos = {
+        'total': sum(g[1] for g in gastos_por_categoria),
+        'por_categoria': [{'name': categoria, 'value': valor} for categoria, valor in gastos_por_categoria]
+    }
+    
     convidados_principais = Convidado.query.filter_by(user_id=current_user.id, convidado_principal_id=None).all()
     total_convidados = sum(1 + len(p.familia) for p in convidados_principais)
     total_tarefas = ChecklistItem.query.filter_by(user_id=current_user.id).count() or 0
     tarefas_concluidas = ChecklistItem.query.filter_by(user_id=current_user.id, concluido=True).count() or 0
+    
     return jsonify({
         'nome_organizador': current_user.nome_completo,
         'bebes': bebes_data,
         'data_cha': data_cha,
-        'resumo_gastos': {'total': total_gasto},
+        'resumo_gastos': resumo_gastos,
         'resumo_convidados': {'total': total_convidados},
         'resumo_checklist': {'total': total_tarefas, 'concluidas': tarefas_concluidas}
     })
@@ -167,16 +178,23 @@ def delete_bebe(current_user, bebe_id):
 @token_required
 def get_gastos(current_user):
     gastos = Gasto.query.filter_by(organizador=current_user).order_by(Gasto.data_gasto.desc()).all()
-    return jsonify([{'id': g.id, 'descricao': g.descricao, 'fornecedor': g.fornecedor, 'valor': g.valor, 'metodo_pagamento': g.metodo_pagamento} for g in gastos])
+    return jsonify([{'id': g.id, 'descricao': g.descricao, 'fornecedor': g.fornecedor, 'valor': g.valor, 'metodo_pagamento': g.metodo_pagamento, 'categoria': g.categoria} for g in gastos])
 
 @api.route('/gastos', methods=['POST'])
 @token_required
 def add_gasto(current_user):
     data = request.get_json()
-    novo_gasto = Gasto(descricao=data['descricao'], fornecedor=data.get('fornecedor'), valor=float(data['valor']), metodo_pagamento=data.get('metodo_pagamento', 'Outro'), organizador=current_user)
+    novo_gasto = Gasto(
+        descricao=data['descricao'],
+        fornecedor=data.get('fornecedor'),
+        valor=float(data['valor']),
+        metodo_pagamento=data.get('metodo_pagamento', 'Outro'),
+        categoria=data.get('categoria', 'Outros'),
+        organizador=current_user
+    )
     db.session.add(novo_gasto)
     db.session.commit()
-    return jsonify({'id': novo_gasto.id, 'descricao': novo_gasto.descricao, 'fornecedor': novo_gasto.fornecedor, 'valor': novo_gasto.valor, 'metodo_pagamento': novo_gasto.metodo_pagamento}), 201
+    return jsonify({'id': novo_gasto.id, 'descricao': novo_gasto.descricao, 'fornecedor': novo_gasto.fornecedor, 'valor': novo_gasto.valor, 'metodo_pagamento': novo_gasto.metodo_pagamento, 'categoria': novo_gasto.categoria}), 201
 
 @api.route('/gastos/<int:gasto_id>', methods=['DELETE'])
 @token_required
@@ -250,15 +268,11 @@ def update_checklist_item(current_user, item_id):
     item = db.session.get(ChecklistItem, item_id)
     if not item or item.user_id != current_user.id:
         return jsonify({'message': 'Acesso não autorizado.'}), 404
-
     data = request.get_json()
-
-    # Lógica atualizada: verifica se veio 'concluido' OU 'tarefa'
     if 'concluido' in data:
         item.concluido = data['concluido']
     if 'tarefa' in data:
         item.tarefa = data['tarefa']
-
     db.session.commit()
     return jsonify({'message': 'Item atualizado.'})
 
@@ -277,7 +291,10 @@ def delete_checklist_item(current_user, item_id):
 def get_enxoval_items(current_user):
     items = EnxovalItem.query.filter_by(user_id=current_user.id).all()
     if not items:
-        TEMPLATE_ENXOVAL = { "Roupas": ["Body manga curta (6)"], "Higiene": ["Fraldas RN ou P"] }
+        TEMPLATE_ENXOVAL = {
+            "Roupas": ["Body manga curta (6)", "Body manga longa (6)", "Mijão (culote) (6)"],
+            "Higiene": ["Fraldas RN ou P", "Lenços umedecidos", "Pomada para assaduras"],
+        }
         for categoria, lista_itens in TEMPLATE_ENXOVAL.items():
             for nome_item in lista_itens:
                 novo_item = EnxovalItem(item=nome_item, categoria=categoria, user_id=current_user.id)

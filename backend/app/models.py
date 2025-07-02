@@ -40,6 +40,7 @@ class Gasto(db.Model):
     fornecedor = db.Column(db.String(150), nullable=True)
     valor = db.Column(db.Float, nullable=False)
     metodo_pagamento = db.Column(db.String(50), nullable=False)
+    categoria = db.Column(db.String(100), nullable=False, default='Outros')
     data_gasto = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
 
