@@ -285,24 +285,66 @@ input[type="checkbox"] {
   padding: 0;
 }
 
-/* ===== 6. RESPONSIVIDADE (PARA CELULARES) ===== */
-@media (max-width: 768px) {
+/* ===== 6. RESPONSIVIDADE (PARA CELULARES) - VERSÃO ATUALIZADA ===== */
+
+/* Estilos para o botão hambúrguer (escondido no desktop) */
+.mobile-menu-toggle {
+  display: none;
+  font-size: 1.8rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1100; /* Fica na frente do menu */
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@media (max-width: 900px) { /* Ponto de quebra um pouco maior */
   .App {
-    padding: 10px;
-    margin: 10px;
+    padding: 15px 20px;
   }
+
+  /* Esconde os links no topo e mostra o botão hambúrguer */
   .nav-links {
-    display: none; /* Esconde os links no topo em telas pequenas */
+    display: none;
   }
-  .dashboard-grid {
-    grid-template-columns: 1fr; /* Coloca os cards um abaixo do outro */
+  .mobile-menu-toggle {
+    display: block;
   }
-  .dashboard-card-link:nth-child(1) {
-    grid-column: span 1; /* Reseta a expansão do primeiro card */
+
+  /* Estilo do menu quando aberto no mobile */
+  .nav-links.mobile-open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 75px; /* Posição abaixo da navbar */
+    left: 0;
+    width: 100%;
+    background-color: var(--cor-branco);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 10px 0;
+  }
+  .nav-links.mobile-open a {
+    text-align: center;
+    padding: 15px;
+    width: 100%;
+    border-bottom: 1px solid var(--cor-fundo);
+  }
+  .nav-links.mobile-open a:last-child {
+    border-bottom: none;
   }
 
   /* Tabela de Gastos Responsiva */
-  .gastos-list table, .gastos-list thead, .gastos-list tbody, .gastos-list th, .gastos-list td, .gastos-list tr {
+  .gastos-list table, 
+  .gastos-list thead, 
+  .gastos-list tbody, 
+  .gastos-list th, 
+  .gastos-list td, 
+  .gastos-list tr {
     display: block;
   }
   .gastos-list thead tr {
@@ -314,10 +356,10 @@ input[type="checkbox"] {
     border: 1px solid #ccc;
     margin-bottom: 15px;
     border-radius: 8px;
+    padding: 10px;
   }
   .gastos-list td {
     border: none;
-    border-bottom: 1px solid #eee;
     position: relative;
     padding-left: 50%;
     text-align: right;
@@ -327,8 +369,6 @@ input[type="checkbox"] {
     position: absolute;
     left: 10px;
     width: 45%;
-    padding-right: 10px;
-    white-space: nowrap;
     text-align: left;
     font-weight: bold;
   }
