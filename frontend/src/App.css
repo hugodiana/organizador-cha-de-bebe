@@ -970,24 +970,21 @@ button, .btn {
   text-align: center;
 }
 
-/* === APRIMORAMENTOS DE ESTILO - CONVIDADOS E CHECKLIST === */
-
-/* --- Lista de Convidados --- */
-.convidados-list {
-  list-style: none;
+* --- Lista de Convidados (REFINADO) --- */
+.convidados-list > ul {
+  list-style: none; /* Remove os bullets padrão da lista */
   padding: 0;
   margin-top: 20px;
 }
 
 .convidado-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 12px 15px;
   background-color: var(--cor-branco);
   border: 1px solid #e8eaf0;
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px; /* Reduz um pouco o espaçamento */
   transition: box-shadow 0.2s ease;
 }
 
@@ -995,21 +992,28 @@ button, .btn {
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
+/* Indentação e estilo para familiares */
 .convidado-item.familiar {
-  margin-left: 40px;
+  margin-left: 30px; /* Aumenta a indentação */
   background-color: #fdfdff;
+  border-left: 3px solid var(--cor-fundo); /* Adiciona uma linha para indicar familiar */
 }
 
 .convidado-info {
   display: flex;
   align-items: center;
-  gap: 15px; /* Aumenta o espaço entre o checkbox e o nome */
+  gap: 10px; /* Reduz um pouco o espaço entre checkbox e nome */
+  flex-grow: 1; /* Permite que o nome ocupe mais espaço */
 }
 
 .convidado-info label {
   font-weight: 600;
   color: var(--cor-texto-principal);
   cursor: pointer;
+  flex-grow: 1; /* Permite que o label (nome) cresça */
+  overflow: hidden; /* Evita que nomes longos quebrem o layout */
+  text-overflow: ellipsis; /* Adiciona "..." para nomes longos */
+  white-space: nowrap;
 }
 
 .convidado-info label.confirmado {
@@ -1020,18 +1024,18 @@ button, .btn {
 .convidado-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px; /* Reduz um pouco o espaço entre os botões */
 }
 
 .action-btn {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.2rem;
-  padding: 5px;
+  font-size: 1rem; /* Reduz o tamanho dos ícones */
+  padding: 4px; /* Reduz o preenchimento */
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  width: 24px; /* Reduz o tamanho dos botões */
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1044,4 +1048,827 @@ button, .btn {
 
 .add-family-btn {
   color: var(--cor-primaria);
+  font-size: 1.2rem; /* Mantém o tamanho maior do "+" */
 }
+
+/* Estilos para o formulário de adicionar familiar (mantendo simples) */
+.add-membro-form {
+  display: flex;
+  gap: 8px;
+  margin-left: 30px; /* Alinha com os familiares */
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.add-membro-form input {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.add-membro-form button {
+  background-color: var(--cor-primaria);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.add-membro-form button:hover {
+  background-color: var(--cor-primaria-hover);
+}
+
+/* Remove o estilo de lista padrão da ul principal dentro de .convidados-list */
+.convidados-list > ul > li {
+  list-style-type: none;
+}
+
+/* Estilo para o ícone de remover (mais consistente) */
+.remove-btn.mini {
+  font-size: 1rem;
+  width: 24px;
+  height: 24px;
+  line-height: 20px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cor-erro);
+  border: 1px solid var(--cor-erro);
+  background-color: transparent;
+}
+
+.remove-btn.mini:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+/* Alinha o conteúdo principal do convidado */
+.convidados-list > ul > li > .convidado-item.principal {
+  padding-left: 15px; /* Compensação para o possível bullet */
+}
+
+/* Ajuste fino para o espaçamento do checkbox */
+.convidado-info input {
+  margin-right: 8px;
+}
+
+/* Espaçamento entre os grupos de convidados (principal + família) */
+.convidados-list > ul > li {
+  margin-bottom: 15px;
+}
+
+/* Garante que o filtro de busca não fique colado na lista */
+.convidados-list > h3 + .filter-container {
+  margin-top: 15px;
+}
+
+.filter-container {
+  margin-bottom: 15px;
+}
+
+/* Garante um pequeno espaço acima do formulário de adicionar convidado principal */
+.convidados-container > .form-container {
+  margin-top: 20px;
+}
+
+/* Estilo para a div que contém o form de adicionar familiar */
+.convidados-list > ul > li > .familiar {
+  margin-left: 0; /* Resetando qualquer margem */
+  padding-left: 30px; /* Indentando o formulário */
+}
+
+/* Esconde o marcador de lista padrão para o convidado principal também */
+.convidados-list > ul > li > .convidado-item.principal::before {
+  content: none;
+}
+
+/* Ajuste para alinhar o checkbox do familiar */
+.convidado-item.familiar .convidado-info input {
+  margin-left: 15px; /* Para alinhar com a indentação */
+}
+
+/* Reduz a margem inferior do último item da lista */
+.convidados-list > ul > li:last-child {
+  margin-bottom: 0;
+}
+
+/* Estilo para a div que envolve o checkbox e o label (melhor controle do layout) */
+.convidado-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%; /* Garante que ocupe a largura disponível */
+}
+
+/* Estilo para o label (nome) para ocupar o espaço restante */
+.convidado-info label {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Ajuste fino no espaçamento do checkbox */
+.convidado-item > input {
+  margin-right: 10px; /* Espaço entre o "bullet" (se ainda visível) e o checkbox */
+}
+
+/* Certifica-se de que o flex container principal alinhe tudo corretamente */
+.convidado-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Distribui o espaço entre info e actions */
+}
+
+/* Ajuste para o checkbox ficar mais à esquerda */
+.convidado-item > input {
+  margin-right: 15px;
+  flex-shrink: 0; /* Impede que o checkbox encolha */
+}
+
+/* Alinha o bloco de informações (checkbox + label) à esquerda */
+.convidado-info {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+/* Garante que o label não fique muito colado no checkbox */
+.convidado-info label {
+  margin-left: 5px;
+}
+
+/* Alinha as ações (botões) à direita */
+.convidado-actions {
+  flex-shrink: 0; /* Impede que os botões encolham */
+}
+
+
+/* --- Checklist de Organização e Enxoval --- (Estilos gerais) */
+.checklist-container .checklist,
+.enxoval-container .enxoval-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.checklist-container .checklist li,
+.enxoval-container .enxoval-list li {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: var(--cor-branco);
+  border: 1px solid #e8eaf0;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: box-shadow 0.2s ease;
+}
+
+.checklist-container .checklist li:hover,
+.enxoval-container .enxoval-list li:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.checklist-container .checklist li input,
+.enxoval-container .enxoval-list li input {
+  margin-right: 15px;
+}
+
+.checklist-container .checklist li .editable-span,
+.enxoval-container .enxoval-list li .item-name {
+  flex-grow: 1;
+  color: var(--cor-texto-principal);
+  font-weight: 500;
+  word-break: break-word; /* Evita que textos longos quebrem o layout */
+}
+
+.checklist-container .checklist li.concluido .editable-span,
+.enxoval-container .enxoval-list li.checked .item-name {
+  text-decoration: line-through;
+  color: var(--cor-texto-secundario);
+}
+
+.checklist-container .checklist li .remove-btn,
+.enxoval-container .enxoval-list li .remove-btn {
+  background: none;
+  border: none;
+  color: var(--cor-erro);
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-left: 15px;
+}
+
+.checklist-container .form-container,
+.enxoval-container .form-container {
+  margin-bottom: 20px;
+}
+
+.checklist-container .form-container input,
+.enxoval-container .form-container input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-right: 10px;
+  flex-grow: 1;
+}
+
+.checklist-container .form-container button,
+.enxoval-container .form-container button {
+  background-color: var(--cor-primaria);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.checklist-container .form-container button:hover,
+.enxoval-container .form-container button:hover {
+  background-color: var(--cor-primaria-hover);
+}
+
+.checklist-container .orcamento-status,
+.enxoval-container .orcamento-status {
+  margin-bottom: 20px;
+  color: var(--cor-texto-secundario);
+}
+
+.checklist-container .empty-state,
+.enxoval-container .empty-state {
+  text-align: center;
+  color: var(--cor-texto-secundario);
+  padding: 20px;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+/* Estilo específico para o botão de remover acompanhante (menor) */
+.convidado-item.familiar .convidado-actions .remove-btn {
+  font-size: 1rem;
+  width: 24px;
+  height: 24px;
+  line-height: 20px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cor-erro);
+  border: 1px solid var(--cor-erro);
+  background-color: transparent;
+  margin-left: 8px;
+}
+
+.convidado-item.familiar .convidado-actions .remove-btn:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+/* Garante que o form de adicionar familiar não fique muito colado no botão de remover */
+.convidado-item.principal + .familiar .add-membro-form {
+  margin-top: 10px;
+}
+
+/* Espaçamento entre o checkbox e o label na lista de convidados */
+.convidado-info > input {
+  margin-right: 12px;
+}
+
+/* Ajuste para o alinhamento vertical dos itens */
+.convidados-list > ul > li {
+  align-items: center;
+}
+
+/* Garante que o nome do convidado principal não fique muito colado no checkbox */
+.convidado-item.principal .convidado-info label {
+  margin-left: 5px;
+}
+
+/* Ajuste para o alinhamento do checkbox do familiar */
+.convidado-item.familiar .convidado-info > input {
+  margin-left: 25px; /* Alinha com a indentação */
+}
+
+/* Espaçamento entre o checkbox e o nome do familiar */
+.convidado-item.familiar .convidado-info label {
+  margin-left: 8px;
+}
+
+/* Reduz a margem inferior dos itens da lista para um visual mais agrupado */
+.convidados-list > ul > li {
+  margin-bottom: 5px;
+  padding: 10px 15px; /* Reduz um pouco o padding vertical */
+}
+
+/* Aumenta um pouco a margem inferior do último item de cada grupo */
+.convidados-list > ul > li > .familiar:last-child {
+  margin-bottom: 10px;
+}
+
+/* Espaçamento acima do formulário de adicionar convidado principal */
+.convidados-container > .form-container {
+  margin-top: 15px;
+  margin-bottom: 15px; /* Adiciona espaço abaixo também */
+}
+
+/* Estilo para a div que envolve o input e o label (controle do layout) */
+.convidado-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1; /* Permite que o nome ocupe o espaço restante */
+}
+
+/* Estilo para o label (nome) para ocupar o espaço e evitar quebra */
+.convidado-info label {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Garante que o checkbox não encolha */
+.convidado-info > input {
+  flex-shrink: 0;
+}
+
+/* Alinha o botão de remover no final da linha */
+.convidado-actions {
+  flex-shrink: 0; /* Impede que os botões encolham */
+  margin-left: auto; /* Empurra os botões para a direita */
+}
+
+/* Reduz um pouco o tamanho dos botões de ação */
+.action-btn {
+  font-size: 1rem;
+  width: 28px;
+  height: 28px;
+}
+
+/* Ajusta o tamanho do botão de adicionar familiar */
+.add-family-btn {
+  font-size: 1.1rem;
+  width: 28px;
+  height: 28px;
+}
+
+/* Garante que o form de adicionar familiar esteja bem posicionado */
+.convidados-list > ul > li > .familiar .add-membro-form {
+  margin-left: 35px;
+  margin-top: 2px;
+  margin-bottom: 8px;
+}
+
+/* Reduz a margem inferior dos itens principais */
+.convidados-list > ul > li > .convidado-item.principal {
+  margin-bottom: 2px;
+}
+
+/* Aumenta a margem inferior dos grupos familiares */
+.convidados-list > ul > li {
+  margin-bottom: 10px;
+}
+
+/* Reduz a margem superior do título da lista de convidados */
+.convidados-list > h3 {
+  margin-top: 15px;
+}
+
+/* Alinha o checkbox mais à esquerda */
+.convidado-item > input {
+  margin-right: 15px;
+}
+
+/* Espaçamento entre checkbox e label */
+.convidado-info label {
+  margin-left: 5px;
+}
+
+/* Alinha o botão de remover à direita */
+.convidado-actions {
+  margin-left: auto;
+}
+
+/* Reduz o tamanho do ícone de remover */
+.remove-btn.mini {
+  font-size: 0.9rem;
+  width: 22px;
+  height: 22px;
+  line-height: 18px;
+}
+
+/* Ajusta a indentação dos familiares */
+.convidado-item.familiar {
+  margin-left: 40px;
+}
+
+/* Espaçamento do form de adicionar familiar */
+.convidados-list > ul > li > .familiar .add-membro-form {
+  margin-left: 45px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+/* Espaçamento entre os itens principais e seus familiares */
+.convidados-list > ul > li > .convidado-item.principal + .familiar {
+  margin-top: 2px;
+}
+
+/* Reduz a margem inferior dos itens da lista */
+.convidados-list > ul > li {
+  margin-bottom: 3px;
+  padding: 8px 15px;
+}
+
+/* Aumenta a margem inferior dos grupos */
+.convidados-list > ul > li {
+  margin-bottom: 12px;
+}
+
+/* Ajuste fino no espaçamento do input */
+.convidado-info > input {
+  margin-right: 10px;
+}
+
+/* Espaçamento do label */
+.convidado-info label {
+  margin-left: 3px;
+}
+
+/* Reduz o tamanho dos botões */
+.action-btn, .remove-btn.mini, .add-family-btn {
+  width: 26px;
+  height: 26px;
+  font-size: 0.9rem;
+}
+
+.add-family-btn {
+  font-size: 1rem;
+}
+
+/* Ajuste na indentação e espaçamento do form de adicionar familiar */
+.convidados-list > ul > li > .familiar .add-membro-form {
+  margin-left: 50px;
+  margin-top: 3px;
+  margin-bottom: 8px;
+  gap: 5px;
+}
+
+.add-membro-form input {
+  padding: 6px;
+  font-size: 0.9rem;
+}
+
+.add-membro-form button {
+  padding: 6px 10px;
+  font-size: 0.9rem;
+}
+
+/* Reduz a margem inferior dos itens principais */
+.convidados-list > ul > li > .convidado-item.principal {
+  margin-bottom: 1px;
+  padding: 10px 15px;
+}
+
+/* Aumenta a margem inferior dos grupos */
+.convidados-list > ul > li {
+  margin-bottom: 10px;
+}
+
+
+/* --- Checklist de Organização e Enxoval --- (Estilos específicos) */
+.checklist-container .checklist li,
+.enxoval-container .enxoval-list li {
+  padding: 8px 15px;
+  margin-bottom: 5px;
+}
+
+.checklist-container .checklist li input,
+.enxoval-container .enxoval-list li input {
+  margin-right: 10px;
+}
+
+.checklist-container .checklist li .remove-btn,
+.enxoval-container .enxoval-list li .remove-btn {
+  font-size: 1rem;
+  margin-left: 10px;
+}
+
+/* Ajuste no espaçamento do form da checklist e enxoval */
+.checklist-container .form-container,
+.enxoval-container .form-container {
+  margin-bottom: 15px;
+}
+
+.checklist-container .form-container input,
+.enxoval-container .form-container input {
+  padding: 8px;
+  font-size: 0.9rem;
+}
+
+.checklist-container .form-container button,
+.enxoval-container .form-container button {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+}
+
+/* Reduz a margem inferior do status */
+.checklist-container .orcamento-status,
+.enxoval-container .orcamento-status {
+  margin-bottom: 15px;
+}
+
+/* Ajuste no espaçamento da mensagem de lista vazia */
+.checklist-container .empty-state,
+.enxoval-container .empty-state {
+  padding: 15px;
+  margin-top: 15px;
+}
+
+/* Estilos específicos para a EditableText (se necessário) */
+.editable-input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px;
+  font-size: 1rem;
+  font-family: 'Nunito', sans-serif;
+  width: 100%; /* Ocupa a largura disponível */
+  box-sizing: border-box; /* Inclui padding e border na largura */
+}
+
+.editable-span {
+  cursor: text;
+  padding: 2px 0;
+  display: inline-block; /* Para evitar quebra de linha estranha */
+}
+
+/* Estilo para o botão de remover na EditableText (se necessário) */
+.editable-span + .remove-btn {
+  margin-left: 8px;
+  font-size: 1rem;
+}
+
+/* --- Filtros (Compartilhados) --- */
+.filter-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.filter-container input,
+.filter-container select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Estilos para o container principal das páginas (espaçamento geral) */
+.gastos-container,
+.convidados-container,
+.checklist-container,
+.enxoval-container,
+.meu-convite-container {
+  padding: 20px;
+}
+
+/* Estilos para os títulos h2 das páginas */
+.gastos-container h2,
+.convidados-container h2,
+.checklist-container h2,
+.enxoval-container h2,
+.meu-convite-container h2 {
+  margin-bottom: 20px;
+  color: var(--cor-primaria);
+}
+
+/* Estilos para os títulos h3 dentro dos containers */
+.gastos-container h3,
+.convidados-container h3,
+.checklist-container h3,
+.enxoval-container h3,
+.meu-convite-container h3 {
+  margin-top: 25px;
+  margin-bottom: 15px;
+  color: var(--cor-secundaria);
+}
+
+/* Estilo para a mensagem de orçamento/status */
+.orcamento-status {
+  color: var(--cor-texto-secundario);
+  margin-bottom: 15px;
+}
+
+.orcamento-status strong {
+  font-weight: bold;
+  color: var(--cor-texto-principal);
+}
+
+/* Estilo para o container do formulário */
+.form-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  margin-bottom: 20px;
+}
+
+.form-container h3 {
+  margin-top: 0;
+}
+
+.form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-container input,
+.form-container select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.form-container button {
+  background-color: var(--cor-primaria);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.form-container button:hover {
+  background-color: var(--cor-primaria-hover);
+}
+
+/* Estilo para a mensagem de estado vazio (listas) */
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: var(--cor-texto-secundario);
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+/* Estilos para botões de ação (genéricos) */
+.action-btn, .remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.remove-btn {
+  color: var(--cor-erro);
+  font-size: 1.1rem;
+}
+
+.remove-btn:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+/* Estilos para o container principal da página */
+.convidados-container {
+  padding: 20px;
+}
+
+/* Título da página */
+.convidados-container h2 {
+  color: var(--cor-primaria);
+  margin-bottom: 20px;
+}
+
+/* Status (total e confirmados) */
+.convidados-container .orcamento-status {
+  color: var(--cor-texto-secundario);
+  margin-bottom: 15px;
+}
+
+.convidados-container .orcamento-status strong {
+  font-weight: bold;
+  color: var(--cor-texto-principal);
+}
+
+/* Container do formulário de adicionar convidado principal */
+.convidados-container .form-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  margin-bottom: 20px;
+}
+
+.convidados-container .form-container h3 {
+  margin-top: 0;
+  color: var(--cor-secundaria);
+}
+
+.convidados-container .form-container form {
+  display: flex;
+  gap: 10px;
+}
+
+.convidados-container .form-container input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  flex-grow: 1;
+}
+
+.convidados-container .form-container button {
+  background-color: var(--cor-primaria);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.convidados-container .form-container button:hover {
+  background-color: var(--cor-primaria-hover);
+}
+
+/* Container da lista de convidados */
+.convidados-list {
+  margin-top: 25px;
+}
+
+.convidados-list h3 {
+  color: var(--cor-secundaria);
+  margin-bottom: 15px;
+}
+
+/* Container do filtro de busca */
+.convidados-list .filter-container {
+  margin-bottom: 20px;
+}
+
+.convidados-list .filter-container input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  font-size: 1rem;
+}
+
+/* Lista de convidados (já estilizada acima) */
+
+/* Mensagem de lista vazia */
+.convidados-list .empty-state {
+  text-align: center;
+  padding: 20px;
+  color: var(--cor-texto-secundario);
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+/* Estilo para o checkbox */
+.convidado-info input {
+  appearance: none;
+  background-color: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 3px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.convidado-info input::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: var(--cor-primaria);
+  border-radius: 2px;
+  transform: scale(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+.convidado-info input:checked::before {
+  transform: scale(1);
+}
+
+.convidado-info input:focus-visible {
+  border-color: var(--cor-primaria);
+  box-shadow: 0 0 0 2px rgba(105, 179, 255, 0.4);
+}
+
+/* Ajuste fino para o espaçamento */
+.convidado
