@@ -748,15 +748,34 @@ button, .btn {
   to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
+/* === Estilos Adicionais para o Dashboard com Gráfico === */
 .resumo-gastos-container {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 20px;
 }
 .resumo-numeros {
-  flex-basis: 50%;
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
 }
 .resumo-grafico {
-  flex-basis: 50%;
+  flex: 1.5;
+  min-width: 250px;
   height: 200px;
+}
+.card-link {
+  display: inline-block;
+  margin-top: 15px;
+  font-weight: bold;
+  color: var(--cor-primaria);
+  text-decoration: none;
+}
+.grafico-vazio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--cor-texto-secundario);
 }
