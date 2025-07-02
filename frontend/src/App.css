@@ -829,25 +829,135 @@ button, .btn {
   grid-column: 1 / -1;
 }
 
-/* --- Refinamentos da Tabela --- */
-.gastos-list table {
-  margin-top: 30px;
+/* === APRIMORAMENTOS DE ESTILO - GASTOS E FORMULÁRIOS === */
+
+/* Adiciona um rótulo (label) acima de cada campo do formulário */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--cor-texto-secundario);
+}
+
+/* Cria a grade para organizar os campos menores */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+/* Ocupa a largura total (para descrição e fornecedor) */
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+/* --- ESTILOS CORRIGIDOS E REFINADOS DA TABELA DE GASTOS --- */
+.gastos-list table {
+  width: 100%;
+  border-collapse: collapse; /* Remove espaços entre as bordas */
+  margin-top: 30px;
+  table-layout: fixed; /* Ajuda a controlar a largura das colunas */
+}
+
+/* Estilo do cabeçalho da tabela */
 .gastos-list th {
   color: var(--cor-texto-secundario);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-align: left;
+  padding: 12px 15px;
+  border-bottom: 2px solid #eee;
 }
 
-.gastos-list tbody tr:hover {
-  background-color: #fafbff; /* Efeito suave ao passar o mouse */
-}
-
+/* Estilo das células da tabela */
 .gastos-list td {
   color: var(--cor-texto-principal);
   font-weight: 500;
+  padding: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Efeito suave ao passar o mouse sobre as linhas */
+.gastos-list tbody tr:hover {
+  background-color: #fafbff;
+}
+
+/* Alinhamentos e larguras específicas das colunas */
+.gastos-list th:nth-child(3),
+.gastos-list td:nth-child(3) {
+  text-align: right; /* Alinha Valor (R$) à direita */
+}
+
+.gastos-list th:nth-child(5),
+.gastos-list td:nth-child(5) {
+  text-align: center; /* Alinha Ação no centro */
+  width: 10%; /* Define uma largura menor para a coluna de ação */
+}
+
+
+/* --- SEÇÃO RESPONSIVA (PARA CELULARES) --- */
+/* Garante que estes estilos só se apliquem em telas pequenas */
+@media (max-width: 768px) {
+  /* ... (outras regras responsivas que já estão aí) ... */
+  
+  /* --- MÁGICA DA TABELA RESPONSIVA --- */
+  .gastos-list table, 
+  .gastos-list thead, 
+  .gastos-list tbody, 
+  .gastos-list th, 
+  .gastos-list td, 
+  .gastos-list tr {
+    display: block;
+  }
+
+  .gastos-list thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .gastos-list tr {
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    border-radius: 8px;
+  }
+
+  .gastos-list td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+    min-height: 30px; /* Garante altura mínima */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  
+  .gastos-list td:before {
+    content: attr(data-label); /* Usa o atributo data-label que adicionaremos no JSX */
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+    color: var(--cor-texto-secundario);
+  }
+
+  /* Esconde a coluna de fornecedor no celular para economizar espaço (opcional) */
+  .gastos-list td:nth-of-type(2) {
+    display: none;
+  }
 }
 
 /* Alinha a coluna de valor à direita para melhor visualização */

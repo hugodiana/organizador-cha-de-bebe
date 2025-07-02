@@ -206,15 +206,16 @@ function GastosPage() {
             <tbody>
               {gastosFiltrados.map(gasto => (
                 <tr key={gasto.id}>
-                  <td>{gasto.descricao}</td>
-                  <td>{gasto.fornecedor}</td>
-                  <td>{gasto.categoria}</td> {/* CÉLULA DE CATEGORIA ADICIONADA */}
-                  <td>R$ {gasto.valor.toFixed(2)}</td>
-                  <td>{gasto.metodo_pagamento}</td>
-                  <td><button className="remove-btn" onClick={() => handleDeleteGasto(gasto.id)}>×</button></td>
-                </tr>
-              ))}
-            </tbody>
+                  {/* Adicionamos o 'data-label' em cada td */}
+                  <td data-label="Descrição">{gasto.descricao}</td>
+                  <td data-label="Fornecedor">{gasto.fornecedor}</td>
+                  <td data-label="Categoria">{gasto.categoria}</td>
+                  <td data-label="Valor">R$ {gasto.valor.toFixed(2)}</td>
+                  <td data-label="Pagamento">{gasto.metodo_pagamento}</td>
+                  <td data-label="Ação"><button className="remove-btn" onClick={() => handleDeleteGasto(gasto.id)}>×</button></td>
+              </tr>
+            ))}
+          </tbody>
           </table>
         )}
       </div>
