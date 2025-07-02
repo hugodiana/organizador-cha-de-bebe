@@ -109,23 +109,23 @@ function ConvidadosPage() {
       <div className="convidados-list">
         <h3>Convidados</h3>
         {convidados.length > 0 ? (
-          <ul>
-            {convidados.map(grupo => (
-              <li key={grupo.id}>
-                <div className="convidado-item">
-                  <input type="checkbox" checked={grupo.confirmado} onChange={() => handleToggleConfirmacao(grupo.id, grupo.confirmado)} title={`Confirmar ${grupo.nome}`} />
-                  <span className={grupo.confirmado ? 'confirmado' : ''}>{grupo.nome}</span>
-                  <button onClick={() => handleRemover(grupo.id)} className="remove-btn mini" title="Remover grupo familiar">×</button>
+          <ul className="convidados-list">
+            {convidadosFiltrados.map(convidado => (
+              <li key={convidado.id} className="convidado-item principal">
+                <div className="convidado-info">
+                  <input
+                    type="checkbox"
+                    id={`convidado-${convidado.id}`}
+                    checked={convidado.confirmado}
+                    onChange={() => handleConfirmar(convidado.id, !convidado.confirmado)}
+                  />
+                  <label htmlFor={`convidado-${convidado.id}`} className={convidado.confirmado ? 'confirmado' : ''}>
+                    {convidado.nome}
+                  </label>
                 </div>
-                {grupo.familia.map(familiar => (
-                  <div key={familiar.id} className="convidado-item familiar">
-                    <input type="checkbox" checked={familiar.confirmado} onChange={() => handleToggleConfirmacao(familiar.id, familiar.confirmado)} title={`Confirmar ${familiar.nome}`} />
-                    <span className={familiar.confirmado ? 'confirmado' : ''}>{familiar.nome}</span>
-                    <button onClick={() => handleRemover(familiar.id)} className="remove-btn mini" title={`Remover ${familiar.nome}`}>×</button>
-                  </div>
-                ))}
-                <div className="familiar">
-                  <AddMembroForm grupoId={grupo.id} onAdd={handleAddMembro} />
+                <div className="convidado-actions">
+                  <button onClick={() => setAdicionandoFamiliarPara(convidado.id)} className="action-btn add-family-btn" title="Adicionar familiar">+</button>
+                  <button onClick={() => handleRemover(convidado.id)} className="remove-btn" title="Remover convidado e família">×</button>
                 </div>
               </li>
             ))}
