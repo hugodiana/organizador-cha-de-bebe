@@ -1,11 +1,10 @@
-# Arquivo: backend/app/models.py (Versão Final Corrigida)
+# Arquivo: backend/app/models.py (Versão Final e Corrigida)
 
 from app import db, bcrypt
 from datetime import datetime
-# A linha "from flask_login import UserMixin" foi removida daqui
+from flask_login import UserMixin
 
-# A classe Usuario agora não herda mais de UserMixin
-class Usuario(db.Model):
+class Usuario(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     nome_completo = db.Column(db.String(150), nullable=False)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -14,20 +13,19 @@ class Usuario(db.Model):
     local_cha = db.Column(db.String(200), nullable=True)
     setup_completo = db.Column(db.Boolean, default=False, nullable=False)
 
-    # Relacionamentos
     bebes = db.relationship('Bebe', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     convidados = db.relationship('Convidado', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     gastos = db.relationship('Gasto', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     checklist_items = db.relationship('ChecklistItem', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     enxoval_items = db.relationship('EnxovalItem', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
-
+    presentes = db.relationship('Presente', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
+    
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
 
-# O resto das classes (Bebe, Gasto, Convidado, etc.) continua exatamente igual
 class Bebe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
@@ -64,3 +62,11 @@ class EnxovalItem(db.Model):
     categoria = db.Column(db.String(100), nullable=False)
     concluido = db.Column(db.Boolean, default=False, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+
+class Presente(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome_item = db.Column(db.String(200), nullable=False)
+    ganho = db.Column(db.Boolean, default=False, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    convidado_id = db.Column(db.Integer, db.ForeignKey('convidado.id'), nullable=True)
+    convidado = db.relationship('Convidado', backref='presente_atribuido')
