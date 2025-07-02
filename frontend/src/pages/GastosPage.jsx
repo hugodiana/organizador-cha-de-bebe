@@ -5,13 +5,19 @@ import toast from 'react-hot-toast';
 function GastosPage() {
   const [gastos, setGastos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Estados para o formulário
   const [descricao, setDescricao] = useState('');
   const [fornecedor, setFornecedor] = useState('');
   const [valor, setValor] = useState('');
   const [metodoPagamento, setMetodoPagamento] = useState('Pix');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [categoria, setCategoria] = useState('Outros'); // <-- NOVO ESTADO PARA CATEGORIA
+
+  // Estados para os filtros
   const [termoBusca, setTermoBusca] = useState('');
   const [filtroPagamento, setFiltroPagamento] = useState('Todos');
+  const [filtroCategoria, setFiltroCategoria] = useState('Todas'); // <-- NOVO ESTADO PARA FILTRO DE CATEGORIA
 
   useEffect(() => {
     apiClient.get('/gastos')
@@ -22,9 +28,7 @@ function GastosPage() {
         console.error("Erro ao buscar gastos:", error);
         toast.error("Não foi possível carregar os gastos.");
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   }, []);
 
   const handleAddGasto = async (e) => {
@@ -33,16 +37,21 @@ function GastosPage() {
       toast.error("Por favor, preencha a descrição e o valor.");
       return;
     }
-    const novoGasto = { descricao, fornecedor, valor: parseFloat(valor), metodo_pagamento: metodoPagamento };
+    // Adiciona a categoria ao objeto enviado para a API
+    const novoGasto = { descricao, fornecedor, valor: parseFloat(valor), metodo_pagamento: metodoPagamento, categoria };
+    
     setIsSubmitting(true);
     try {
       const response = await apiClient.post('/gastos', novoGasto);
       setGastos([response.data, ...gastos]);
       toast.success("Gasto adicionado com sucesso!");
+      
+      // Limpa todos os campos do formulário
       setDescricao('');
       setFornecedor('');
       setValor('');
       setMetodoPagamento('Pix');
+      setCategoria('Outros');
     } catch (error) {
       console.error("Erro ao adicionar gasto:", error);
       toast.error('Não foi possível adicionar o gasto.');
@@ -66,20 +75,22 @@ function GastosPage() {
 
   const gastosFiltrados = useMemo(() => {
     return gastos
-      .filter(gasto => {
-        if (filtroPagamento !== 'Todos') {
-          return gasto.metodo_pagamento === filtroPagamento;
-        }
+      .filter(gasto => { // Filtro de Categoria
+        if (filtroCategoria !== 'Todas') return gasto.categoria === filtroCategoria;
         return true;
       })
-      .filter(gasto => {
+      .filter(gasto => { // Filtro de Pagamento
+        if (filtroPagamento !== 'Todos') return gasto.metodo_pagamento === filtroPagamento;
+        return true;
+      })
+      .filter(gasto => { // Filtro de Busca por texto
         const busca = termoBusca.toLowerCase();
         return (
           gasto.descricao.toLowerCase().includes(busca) ||
           (gasto.fornecedor && gasto.fornecedor.toLowerCase().includes(busca))
         );
       });
-  }, [gastos, termoBusca, filtroPagamento]);
+  }, [gastos, termoBusca, filtroPagamento, filtroCategoria]);
 
   if (loading) return <div>Carregando...</div>;
 
@@ -91,7 +102,7 @@ function GastosPage() {
       <div className="orcamento-status">
         Total Exibido: <strong>R$ {totalGastoFiltrado.toFixed(2)}</strong>
       </div>
-
+      
       <div className="form-container">
         <h3>Adicionar Novo Gasto</h3>
         <form onSubmit={handleAddGasto}>
@@ -104,6 +115,15 @@ function GastosPage() {
             <option>Débito</option>
             <option>Dinheiro</option>
             <option>Outro</option>
+          </select>
+          {/* CAMPO DE CATEGORIA ADICIONADO */}
+          <select value={categoria} onChange={e => setCategoria(e.target.value)}>
+            <option>Outros</option>
+            <option>Decoração</option>
+            <option>Buffet/Comida</option>
+            <option>Lembrancinhas</option>
+            <option>Local</option>
+            <option>Bebidas</option>
           </select>
           <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Adicionando...' : 'Adicionar Gasto'}
@@ -120,52 +140,65 @@ function GastosPage() {
             value={termoBusca}
             onChange={e => setTermoBusca(e.target.value)}
           />
+          {/* FILTRO DE CATEGORIA ADICIONADO */}
+          <select value={filtroCategoria} onChange={e => setFiltroCategoria(e.target.value)}>
+            <option value="Todas">Todas as Categorias</option>
+            <option>Outros</option>
+            <option>Decoração</option>
+            <option>Buffet/Comida</option>
+            <option>Lembrancinhas</option>
+            <option>Local</option>
+            <option>Bebidas</option>
+          </select>
           <select value={filtroPagamento} onChange={e => setFiltroPagamento(e.target.value)}>
             <option value="Todos">Todos os Pagamentos</option>
-            <option value="Pix">Pix</option>
-            <option value="Cartão de Crédito">Cartão de Crédito</option>
-            <option value="Débito">Débito</option>
-            <option value="Dinheiro">Dinheiro</option>
-            <option value="Outro">Outro</option>
+            <option>Pix</option>
+            <option>Cartão de Crédito</option>
+            <option>Débito</option>
+            <option>Dinheiro</option>
+            <option>Outro</option>
           </select>
         </div>
-
+        
         {gastos.length > 0 && gastosFiltrados.length === 0 ? (
-            <div className="empty-state">
-                <h3>Nenhum resultado encontrado</h3>
-                <p>Tente ajustar os termos da sua busca ou filtro.</p>
-            </div>
+          <div className="empty-state">
+            <h3>Nenhum resultado encontrado</h3>
+            <p>Tente ajustar os termos da sua busca ou filtro.</p>
+          </div>
         ) : gastos.length === 0 ? (
-            <div className="empty-state">
-                <h3>Nenhum Gasto Registrado</h3>
-                <p>Comece a adicionar suas despesas no formulário acima.</p>
-            </div>
+          <div className="empty-state">
+            <h3>Nenhum Gasto Registrado</h3>
+            <p>Comece a adicionar suas despesas no formulário acima.</p>
+          </div>
         ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>Descrição</th>
-                  <th>Fornecedor</th>
-                  <th>Valor</th>
-                  <th>Pagamento</th>
-                  <th>Ação</th>
+          <table>
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Fornecedor</th>
+                <th>Categoria</th> {/* COLUNA DE CATEGORIA ADICIONADA */}
+                <th>Valor</th>
+                <th>Pagamento</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              {gastosFiltrados.map(gasto => (
+                <tr key={gasto.id}>
+                  <td>{gasto.descricao}</td>
+                  <td>{gasto.fornecedor}</td>
+                  <td>{gasto.categoria}</td> {/* CÉLULA DE CATEGORIA ADICIONADA */}
+                  <td>R$ {gasto.valor.toFixed(2)}</td>
+                  <td>{gasto.metodo_pagamento}</td>
+                  <td><button className="remove-btn" onClick={() => handleDeleteGasto(gasto.id)}>×</button></td>
                 </tr>
-              </thead>
-              <tbody>
-                {gastosFiltrados.map(gasto => (
-                  <tr key={gasto.id}>
-                    <td>{gasto.descricao}</td>
-                    <td>{gasto.fornecedor}</td>
-                    <td>R$ {gasto.valor.toFixed(2)}</td>
-                    <td>{gasto.metodo_pagamento}</td>
-                    <td><button className="remove-btn" onClick={() => handleDeleteGasto(gasto.id)}>×</button></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </div>
   );
 }
+
 export default GastosPage;

@@ -747,3 +747,16 @@ button, .btn {
 @keyframes spin {
   to { transform: translate(-50%, -50%) rotate(360deg); }
 }
+
+.resumo-gastos-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.resumo-numeros {
+  flex-basis: 50%;
+}
+.resumo-grafico {
+  flex-basis: 50%;
+  height: 200px;
+}
