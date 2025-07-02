@@ -1,44 +1,50 @@
-/* ===== VARIÁVEIS GLOBAIS (do index.css) - Colocando aqui para referência =====
+/* ===== 1. VARIÁVEIS GLOBAIS E ESTILOS DE BASE ===== */
 :root {
-  --cor-primaria: #8EC5FC; --cor-secundaria: #E0C3FC; --cor-fundo: #f0f2f5;
-  --cor-texto: #333; --cor-texto-claro: #555; --cor-branco: #ffffff;
-  --cor-sucesso: #4caf50; --cor-erro: #f44336;
+  --cor-primaria: #8EC5FC;
+  --cor-secundaria: #E0C3FC;
+  --cor-fundo: #f4f7fc;
+  --cor-branco: #ffffff;
+  --cor-texto-principal: #2c3e50;
+  --cor-texto-secundario: #7f8c8d;
+  --cor-sucesso: #2ecc71;
+  --cor-erro: #e74c3c;
   --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
-*/
 
-/* === 1. LAYOUT PRINCIPAL E TÍTULOS === */
+body {
+  background-color: var(--cor-fundo);
+}
+
 .App {
-  max-width: 950px;
+  max-width: 1100px;
   margin: 40px auto;
   padding: 20px 40px;
   background-color: var(--cor-branco);
   border-radius: 16px;
   box-shadow: var(--sombra-suave);
 }
-.content { margin-top: 30px; }
+
 h2 {
-  color: var(--cor-primaria);
-  border-bottom: 2px solid var(--cor-secundaria);
-  padding-bottom: 10px;
-  margin-bottom: 30px;
+  color: var(--cor-texto-principal);
   text-align: center;
-  font-weight: 600;
+  margin-bottom: 30px;
 }
+
 h3 {
   color: var(--cor-texto-secundario);
   margin-top: 30px;
   margin-bottom: 15px;
-  text-align: left;
   font-weight: 600;
 }
 
-/* === 2. BARRA DE NAVEGAÇÃO === */
+/* ===== 2. BARRA DE NAVEGAÇÃO (NAVBAR) ===== */
+/* (Estilos da Navbar que já funcionam bem, sem alterações) */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-bottom: 15px;
+  margin-bottom: 20px;
   border-bottom: 2px solid var(--cor-fundo);
 }
 .nav-left {
@@ -117,7 +123,59 @@ h3 {
   color: var(--cor-erro);
 }
 
-/* === 3. FORMULÁRIOS E BOTÕES === */
+/* ===== 3. DASHBOARD (BENTO GRID E NEUBRUTALISMO) ===== */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-top: 20px;
+}
+.dashboard-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+.dashboard-card-link:nth-child(1) {
+  grid-column: span 2; /* Ocupa as 2 colunas */
+}
+.dashboard-card {
+  background-color: #fafbff;
+  padding: 25px;
+  border-radius: 12px;
+  border: 2px solid var(--cor-texto-principal);
+  box-shadow: 4px 4px 0px var(--cor-texto-principal);
+  transition: all 0.2s ease-in-out;
+  height: 100%;
+}
+.dashboard-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0px var(--cor-texto-principal);
+}
+.card-total {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: var(--cor-texto-principal);
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+}
+.resumo-gastos-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+.resumo-numeros {
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
+}
+.resumo-grafico {
+  flex: 1.5;
+  min-width: 250px;
+  height: 200px;
+}
+
+/* ===== 4. FORMULÁRIOS E TABELAS ===== */
 .form-container {
   background-color: #fafbff;
   padding: 25px;
@@ -129,52 +187,49 @@ h3 {
   margin-top: 0;
   text-align: center;
 }
-.form-container form {
-  margin-top: 15px;
-}
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 15px;
-}
 .form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 15px;
 }
-label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--cor-texto-secundario);
+.form-group {
+  margin-bottom: 15px;
 }
-input[type="text"], input[type="number"], input[type="password"], input[type="email"], input[type="date"], select {
+input, select {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  font-size: 1rem;
-  font-family: 'Nunito', sans-serif;
 }
 button[type="submit"] {
   width: 100%;
   padding: 12px 20px;
   border: none;
-  background: linear-gradient(135deg, var(--cor-primaria) 0%, var(--cor-secundaria) 100%);
+  background: var(--cor-primaria);
   color: var(--cor-branco);
-  font-size: 1rem;
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
   margin-top: 10px;
 }
-button[type="submit"]:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+
+/* Estilos da Tabela de Gastos */
+.gastos-list table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.gastos-list th, .gastos-list td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eef2f7;
+}
+.gastos-list th {
+  font-weight: 600;
+  color: var(--cor-texto-secundario);
 }
 
-/* === 4. LISTAS (Convidados, Checklist, etc.) === */
+/* ===== 5. LISTAS (CONVIDADOS E CHECKLIST) ===== */
 .convidados-list ul, .checklist {
   list-style-type: none;
   padding: 0;
@@ -186,7 +241,7 @@ button[type="submit"]:hover {
   margin-bottom: 15px;
   padding: 10px;
 }
-.linha-convidado {
+.linha-convidado, .checklist li {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -198,7 +253,7 @@ button[type="submit"]:hover {
   padding-top: 10px;
   border-top: 1px dashed #eef2f7;
 }
-.info-convidado {
+.info-convidado, .checklist li > .editable-span {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -208,97 +263,73 @@ button[type="submit"]:hover {
   font-weight: 600;
   cursor: pointer;
 }
-.info-convidado label.confirmado {
+.info-convidado label.confirmado, .checklist li.concluido .editable-span {
   text-decoration: line-through;
   color: var(--cor-texto-secundario);
 }
-.info-convidado input[type="checkbox"] {
+input[type="checkbox"] {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-}
-.acoes-convidado {
-  display: flex;
-  align-items: center;
-}
-.add-membro-form {
-  display: flex;
-  width: auto;
-  gap: 10px;
-  padding: 0;
-  margin: 0;
-  border: none;
-  background: none;
-}
-.add-membro-form input {
-  flex-grow: 1;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 8px;
-  font-size: 0.9rem;
-}
-.add-membro-form button {
-  padding: 8px 12px !important;
-  font-size: 1rem !important;
-  font-weight: bold;
-  margin-top: 0 !important;
-  background: var(--cor-sucesso) !important;
-}
-
-/* Estilo para Checklist e Enxoval */
-.checklist li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  border-bottom: 1px solid var(--cor-fundo);
-}
-.checklist li.concluido .editable-span {
-  text-decoration: line-through;
-  color: var(--cor-texto-secundario);
-}
-.checklist li input[type="checkbox"] {
-  margin-right: 15px;
-  width: 20px;
-  height: 20px;
-}
-
-/* === 5. OUTROS COMPONENTES === */
-.empty-state {
-  text-align: center;
-  padding: 50px 20px;
-  background-color: #fafbff;
-  border-radius: 8px;
-  margin-top: 30px;
-  border: 2px dashed #e0e0e0;
-}
-.empty-state h3 {
-  border: none;
-}
-.filter-container {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 25px;
-}
-.filter-container input {
-  flex-grow: 1;
 }
 .remove-btn {
   border-radius: 50%;
   border: none;
   background-color: #fff1f1;
   color: var(--cor-erro);
-  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   width: 28px;
   height: 28px;
   line-height: 28px;
   padding: 0;
-  transition: all 0.2s ease;
 }
-.remove-btn:hover {
-  background-color: var(--cor-erro);
-  color: var(--cor-branco);
-  transform: scale(1.1);
+
+/* ===== 6. RESPONSIVIDADE (PARA CELULARES) ===== */
+@media (max-width: 768px) {
+  .App {
+    padding: 10px;
+    margin: 10px;
+  }
+  .nav-links {
+    display: none; /* Esconde os links no topo em telas pequenas */
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr; /* Coloca os cards um abaixo do outro */
+  }
+  .dashboard-card-link:nth-child(1) {
+    grid-column: span 1; /* Reseta a expansão do primeiro card */
+  }
+
+  /* Tabela de Gastos Responsiva */
+  .gastos-list table, .gastos-list thead, .gastos-list tbody, .gastos-list th, .gastos-list td, .gastos-list tr {
+    display: block;
+  }
+  .gastos-list thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .gastos-list tr {
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    border-radius: 8px;
+  }
+  .gastos-list td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+  }
+  .gastos-list td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+  }
 }
