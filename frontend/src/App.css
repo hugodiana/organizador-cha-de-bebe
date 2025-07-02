@@ -95,33 +95,32 @@ h3 {
   text-align: left;
 }
 
-/* ===== BARRA DE NAVEGAÇÃO ===== */
+/* === Barra de Navegação (Navbar) ATUALIZADA === */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 2px solid var(--cor-fundo);
+  padding-bottom: 15px;
   margin-bottom: 20px;
+  border-bottom: 2px solid var(--cor-fundo);
 }
 
-.nav-logo {
-  font-family: var(--fonte-titulo);
-  font-size: 1.8rem;
-  color: var(--cor-primaria);
+.nav-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 30px;
 }
 
-.nav-logo svg {
-  width: 30px;
-  height: 30px;
+.navbar-logo {
+  font-family: 'Pacifico', cursive; /* Usa a fonte lúdica */
+  font-size: 1.8rem;
+  color: var(--cor-primaria);
+  margin: 0;
 }
 
 .nav-links {
   display: flex;
-  gap: 15px;
+  gap: 10px;
 }
 
 .navbar a {
@@ -130,49 +129,72 @@ h3 {
   font-weight: 600;
   padding: 8px 15px;
   border-radius: 8px;
-  transition: var(--transicao-padrao);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .navbar a:hover {
-  background-color: rgba(139, 212, 80, 0.1);
-  color: var(--cor-primaria);
-  transform: translateY(-2px);
+  background-color: #f0f4ff;
+  color: #6a8dff;
 }
 
-.navbar a.active {
+/* ESTILO PARA O LINK ATIVO */
+.nav-links a.active {
   background-color: var(--cor-primaria);
-  color: white;
+  color: var(--cor-branco);
 }
 
+/* --- ESTILOS DO MENU DROPDOWN --- */
 .nav-auth {
+  position: relative; /* Necessário para o posicionamento do dropdown */
+}
+
+.user-menu-button {
+  background: transparent;
+  border: none;
   display: flex;
   align-items: center;
-  gap: 15px;
-}
-
-.nav-auth span {
-  font-weight: bold;
-  color: var(--cor-texto-principal);
-}
-
-.nav-auth button {
-  background-color: #fde2e2;
-  color: var(--cor-erro);
-  border: none;
-  font-weight: 600;
-  padding: 8px 15px;
-  border-radius: 8px;
+  gap: 8px;
   cursor: pointer;
-  transition: var(--transicao-padrao);
+  font-size: 1rem;
+  font-family: 'Nunito', sans-serif;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+.user-menu-button:hover {
+  background-color: var(--cor-fundo);
+}
+.user-menu-button .dropdown-arrow {
+  font-size: 0.7rem;
 }
 
-.nav-auth button:hover {
-  background-color: var(--cor-erro);
+.dropdown-menu {
+  position: absolute;
+  top: 110%; /* Aparece logo abaixo do botão */
+  right: 0;
+  background-color: var(--cor-branco);
+  border-radius: 8px;
+  box-shadow: var(--sombra-suave);
+  border: var(--borda-suave);
+  width: 180px;
+  z-index: 10;
+  overflow: hidden; /* Garante que os itens respeitem o border-radius */
+}
+
+.dropdown-menu a {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 12px 15px;
+  border-radius: 0; /* Remove o border-radius dos links individuais */
+}
+
+.dropdown-menu a:last-child {
+  border-top: 1px solid var(--cor-fundo);
+  color: var(--cor-erro);
+}
+.dropdown-menu a:hover {
+  background-color: var(--cor-primaria);
   color: var(--cor-branco);
-  transform: translateY(-2px);
 }
 
 /* ===== FORMULÁRIOS ===== */

@@ -1,42 +1,64 @@
-// Arquivo: frontend/src/components/Navbar.jsx (Versão Corrigida)
-
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom'; // Trocamos Link por NavLink
 import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  // Estado para controlar a visibilidade do dropdown
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
   const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/login'); // Redireciona para o login após o logout
-    } catch (error) {
-      console.error("Erro ao fazer logout:", error);
-    }
+    await logout();
+    navigate('/login');
   };
 
-  // A Navbar não aparece em telas públicas ou durante a personalização
+  // Efeito para fechar o dropdown se o usuário clicar fora dele
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropdownRef]);
+
+
   if (!user || user.setup_completo === false) {
-    return null; 
+    return null;
   }
 
-  // A Navbar completa, visível para usuários logados e com setup completo
   return (
     <nav className="navbar">
-      <div className="nav-links">
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/gastos">Gastos</Link>
-        <Link to="/convidados">Convidados</Link>
-        <Link to="/checklist">Checklist</Link>
-        <Link to="/configuracoes">Configurações</Link>
-        <Link to="/meu-convite">Meu Convite</Link>
-        <Link to="/enxoval">Enxoval</Link>
+      <div className="nav-left">
+        <h1 className="navbar-logo">Meu Chá</h1>
+        <div className="nav-links">
+          <NavLink to="/dashboard">Dashboard</NavLink>
+          <NavLink to="/gastos">Gastos</NavLink>
+          <NavLink to="/convidados">Convidados</NavLink>
+          <NavLink to="/checklist">Checklist</NavLink>
+          <NavLink to="/enxoval">Enxoval</Link>
+          <NavLink to="/meu-convite">Meu Convite</NavLink>
+        </div>
       </div>
-      <div className="nav-auth">
-        <span>Olá, {user.nome_completo}!</span>
-        {/* CORREÇÃO APLICADA AQUI: */}
-        <button onClick={() => handleLogout()}>Sair</button>
+
+      <div className="nav-auth" ref={dropdownRef}>
+        {/* O botão agora abre e fecha o dropdown */}
+        <button className="user-menu-button" onClick={() => setDropdownOpen(!dropdownOpen)}>
+          <span>Olá, {user.nome_completo.split(' ')[0]}!</span>
+          <span className="dropdown-arrow">{dropdownOpen ? '▲' : '▼'}</span>
+        </button>
+
+        {/* O menu dropdown só aparece se dropdownOpen for true */}
+        {dropdownOpen && (
+          <div className="dropdown-menu">
+            <NavLink to="/configuracoes" onClick={() => setDropdownOpen(false)}>Configurações</NavLink>
+            <a href="#" onClick={handleLogout}>Sair</a>
+          </div>
+        )}
       </div>
     </nav>
   );
