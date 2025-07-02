@@ -124,33 +124,78 @@ button[type="submit"] {
 
 /* ===== 5. RESPONSIVIDADE FINAL ===== */
 @media (max-width: 950px) {
-  .App { padding: 10px 15px; }
-  .dashboard-grid { grid-template-columns: 1fr; }
-  .dashboard-card-link:nth-child(1) { grid-column: span 1; }
-  .resumo-gastos-container { flex-direction: column; }
-  .filter-container { flex-direction: column; align-items: stretch; }
-
-  /* --- Lógica do Menu Hambúrguer --- */
-  .nav-links { display: none; }
-  .mobile-menu-toggle { display: block; background: transparent; border: none; font-size: 1.8rem; z-index: 1200; cursor: pointer; }
-  .nav-links.mobile-open {
-    display: flex; flex-direction: column; position: absolute;
-    top: 0; right: 0; width: 100%; height: 100vh;
-    background-color: var(--cor-branco);
-    padding-top: 80px; z-index: 1100;
+  .App {
+    padding: 10px 15px;
   }
 
-  /* --- Tabelas e Listas em Cards --- */
-  .data-list table, .data-list thead, .data-list tbody, .data-list th, .data-list td, .data-list tr { display: block; }
-  .data-list thead tr { position: absolute; top: -9999px; left: -9999px; }
-  .data-list tr { border: 1px solid #ccc; margin-bottom: 15px; border-radius: 8px; padding: 10px; }
-  .data-list td { border: none; border-bottom: 1px solid #eee; position: relative; padding-left: 50% !important; text-align: right; display: flex; align-items: center; justify-content: flex-end; min-height: 40px; }
-  .data-list td:last-child { border-bottom: none; }
-  .data-list td:before { content: attr(data-label); position: absolute; left: 10px; width: 45%; text-align: left; font-weight: bold; color: var(--cor-texto-secundario); }
+  /* --- Menu Hambúrguer --- */
+  .nav-links { display: none; }
+  .mobile-menu-toggle {
+    display: block;
+    background: transparent;
+    border: none;
+    font-size: 1.8rem;
+    z-index: 1200;
+    cursor: pointer;
+  }
+  .nav-links.mobile-open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 65px;
+    left: 0;
+    right: 0;
+    background-color: var(--cor-branco);
+    box-shadow: var(--sombra-suave);
+  }
+  
+  /* --- Dashboard --- */
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .dashboard-card-link:nth-child(1) { grid-column: span 1; }
+  .resumo-gastos-container {
+    flex-direction: column;
+  }
+  /* ADICIONADO PARA CORRIGIR O GRÁFICO */
+  .resumo-grafico {
+    width: 100%;
+    height: 250px;
+    margin-top: 20px;
+  }
 
-  /* Ajuste específico para a lista de convidados no mobile */
-  .guest-row { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .guest-row.familiar { margin-left: 0; padding-left: 15px; border-left: 3px solid #eee; }
-  .guest-actions { width: 100%; justify-content: flex-end; }
-  .add-membro-form { margin-left: 0; }
+  /* --- Tabelas em Cards --- */
+  .data-list table, .data-list thead, .data-list tbody, .data-list th, .data-list td, .data-list tr {
+    display: block;
+  }
+  .data-list thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .data-list tr {
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  .data-list td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50% !important;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 40px;
+  }
+  .data-list td:last-child { border-bottom: none; }
+  .data-list td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    width: 45%;
+    text-align: left;
+    font-weight: bold;
+    color: var(--cor-texto-secundario);
+  }
 }
