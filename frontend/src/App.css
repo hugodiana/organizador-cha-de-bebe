@@ -1,523 +1,90 @@
 /* ===== 1. VARIÁVEIS GLOBAIS E ESTILOS DE BASE ===== */
 :root {
-  --cor-primaria: #8EC5FC;
-  --cor-secundaria: #E0C3FC;
-  --cor-fundo: #f4f7fc;
-  --cor-branco: #ffffff;
-  --cor-texto-principal: #2c3e50;
-  --cor-texto-secundario: #7f8c8d;
-  --cor-sucesso: #2ecc71;
-  --cor-erro: #e74c3c;
+  --cor-primaria: #8EC5FC; --cor-secundaria: #E0C3FC; --cor-fundo: #f4f7fc;
+  --cor-branco: #ffffff; --cor-texto-principal: #2c3e50; --cor-texto-secundario: #7f8c8d;
+  --cor-sucesso: #2ecc71; --cor-erro: #e74c3c;
   --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
-
-body {
-  background-color: var(--cor-fundo);
-}
-
+body { background-color: var(--cor-fundo); }
 .App {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 20px 40px;
-  background-color: var(--cor-branco);
-  border-radius: 16px;
-  box-shadow: var(--sombra-suave);
+  max-width: 1100px; margin: 40px auto; padding: 20px 40px;
+  background-color: var(--cor-branco); border-radius: 16px; box-shadow: var(--sombra-suave);
 }
-
-h2 {
-  color: var(--cor-texto-principal);
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-h3 {
-  color: var(--cor-texto-secundario);
-  margin-top: 30px;
-  margin-bottom: 15px;
-  font-weight: 600;
-}
+h2 { color: var(--cor-primaria); text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--cor-secundaria); padding-bottom: 10px; }
+h3 { color: var(--cor-texto-secundario); margin-top: 30px; margin-bottom: 15px; font-weight: 600; text-align: left; }
 
 /* ===== 2. BARRA DE NAVEGAÇÃO (NAVBAR) ===== */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0; /* Ajuste no padding */
-  border-bottom: 2px solid var(--cor-fundo);
-  position: relative; /* Necessário para o menu mobile */
-}
-.nav-left, .nav-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-.navbar-logo {
-  font-family: 'Pacifico', cursive;
-  font-size: 1.8rem;
-  color: var(--cor-primaria);
-  margin: 0;
-  text-decoration: none;
-}
-.nav-links {
-  display: flex;
-  gap: 10px;
-}
-.navbar a {
-  text-decoration: none;
-  color: var(--cor-texto-secundario);
-  font-weight: 600;
-  padding: 8px 15px;
-  border-radius: 8px;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-.navbar a:hover {
-  background-color: #f0f4ff;
-}
-.nav-links a.active {
-  background-color: var(--cor-primaria);
-  color: var(--cor-branco);
-}
-.nav-auth {
-  position: relative;
-}
-.user-menu-button {
-  background: transparent;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-family: 'Nunito', sans-serif;
-  padding: 8px 12px;
-  border-radius: 8px;
-}
-.user-menu-button:hover {
-  background-color: var(--cor-fundo);
-}
-.user-menu-button .dropdown-arrow {
-  font-size: 0.7rem;
-}
-.dropdown-menu {
-  position: absolute;
-  top: 120%;
-  right: 0;
-  background-color: var(--cor-branco);
-  border-radius: 8px;
-  box-shadow: var(--sombra-suave);
-  border: 1px solid #eee;
-  width: 180px;
-  z-index: 1000;
-  overflow: hidden;
-}
-.dropdown-menu a {
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: 12px 15px;
-  border-radius: 0;
-}
-.dropdown-menu a:last-child {
-  border-top: 1px solid var(--cor-fundo);
-  color: var(--cor-erro);
-}
-.mobile-menu-toggle {
-  display: none; /* Escondido no desktop */
-  font-size: 1.8rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 1100;
-}
+.navbar { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 2px solid var(--cor-fundo); }
+.nav-left { display: flex; align-items: center; gap: 30px; }
+.navbar-logo { font-family: 'Pacifico', cursive; font-size: 1.8rem; color: var(--cor-primaria); margin: 0; text-decoration: none; }
+.nav-links { display: flex; gap: 10px; }
+.navbar a { text-decoration: none; color: var(--cor-texto-secundario); font-weight: 600; padding: 8px 15px; border-radius: 8px; transition: all 0.2s ease; }
+.navbar a:hover { background-color: #f0f4ff; }
+.nav-links a.active { background-color: var(--cor-primaria); color: var(--cor-branco); }
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-auth { position: relative; }
+.user-menu-button { background: transparent; border: none; display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 1rem; padding: 8px 12px; border-radius: 8px; }
+.user-menu-button:hover { background-color: var(--cor-fundo); }
+.dropdown-menu { position: absolute; top: 120%; right: 0; background-color: var(--cor-branco); border-radius: 8px; box-shadow: var(--sombra-suave); border: 1px solid #eee; width: 180px; z-index: 10; overflow: hidden; }
+.dropdown-menu a { display: block; width: 100%; text-align: left; }
+.mobile-menu-toggle { display: none; }
 
-/* ===== 6. RESPONSIVIDADE (PARA CELULARES) ===== */
-@media (max-width: 950px) { /* Ponto de quebra ajustado */
-  /* Esconde os links do topo e mostra o botão hambúrguer */
-  .nav-links {
-    display: none;
-  }
-  .mobile-menu-toggle {
-    display: block;
-  }
+/* ===== 3. DASHBOARD ===== */
+.dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 20px; }
+.dashboard-card-link { text-decoration: none; color: inherit; }
+.dashboard-card-link:nth-child(1) { grid-column: span 3; }
+.dashboard-card { background-color: #fafbff; padding: 25px; border-radius: 12px; border: 2px solid var(--cor-texto-principal); box-shadow: 4px 4px 0px var(--cor-texto-principal); transition: all 0.2s ease; height: 100%; }
+.dashboard-card:hover { transform: translate(-4px, -4px); box-shadow: 8px 8px 0px var(--cor-texto-principal); }
+.card-total { font-size: 2.2rem; font-weight: bold; color: var(--cor-texto-principal); }
+.resumo-gastos-container { display: flex; align-items: center; gap: 20px; }
+.resumo-numeros { flex: 1; text-align: center; }
+.resumo-grafico { flex: 1.5; height: 200px; }
 
-  /* Estilo do menu quando aberto no mobile */
-  .nav-links.mobile-open {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 65px; /* Posição abaixo da navbar */
-    left: 0;
-    width: 100%;
-    background-color: var(--cor-branco);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    padding: 10px 0;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-  }
-  .nav-links.mobile-open a {
-    text-align: center;
-    padding: 15px;
-    width: 100%;
-    border-bottom: 1px solid var(--cor-fundo);
-    border-radius: 0;
-  }
-  .nav-links.mobile-open a:last-child {
-    border-bottom: none;
-  }
-}
+/* ===== 4. ESTILOS UNIFICADOS PARA PÁGINAS DE LISTA ===== */
+.summary-bar { display: flex; justify-content: space-around; background-color: #f7f9fc; padding: 20px; border-radius: 12px; margin: 20px 0; font-size: 1.2rem; }
+.form-container { background-color: #fafbff; padding: 25px; border: 1px solid #eef2f7; border-radius: 12px; margin-bottom: 30px; }
+.list-container { margin-top: 30px; }
+.list-container h3 { border-bottom: 2px solid var(--cor-fundo); padding-bottom: 10px; }
+.filter-container { display: flex; gap: 15px; margin-bottom: 20px; }
+.filter-container input { flex-grow: 1; }
+.empty-state { text-align: center; padding: 50px 20px; background-color: #fafbff; border-radius: 8px; margin-top: 30px; border: 2px dashed #e0e0e0; }
+.empty-state h3 { border: none; }
 
-/* ===== 3. DASHBOARD (BENTO GRID E NEUBRUTALISMO) ===== */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 25px;
-  margin-top: 20px;
-}
-.dashboard-card-link {
-  text-decoration: none;
-  color: inherit;
-}
-.dashboard-card-link:nth-child(1) {
-  grid-column: span 2; /* Ocupa as 2 colunas */
-}
-.dashboard-card {
-  background-color: #fafbff;
-  padding: 25px;
-  border-radius: 12px;
-  border: 2px solid var(--cor-texto-principal);
-  box-shadow: 4px 4px 0px var(--cor-texto-principal);
-  transition: all 0.2s ease-in-out;
-  height: 100%;
-}
-.dashboard-card:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: 8px 8px 0px var(--cor-texto-principal);
-}
-.card-total {
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: var(--cor-texto-principal);
-  display: block;
-  margin-top: 10px;
-  text-align: center;
-}
-.resumo-gastos-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 20px;
-}
-.resumo-numeros {
-  flex: 1;
-  min-width: 200px;
-  text-align: center;
-}
-.resumo-grafico {
-  flex: 1.5;
-  min-width: 250px;
-  height: 200px;
-}
+/* --- Tabela de Gastos (Desktop) --- */
+.data-list table { width: 100%; border-collapse: collapse; }
+.data-list th, .data-list td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eef2f7; }
+.data-list th { color: var(--cor-texto-secundario); font-size: 0.75rem; text-transform: uppercase; }
+.data-list tbody tr:hover { background-color: #fafbff; }
 
-/* ===== 4. FORMULÁRIOS E TABELAS ===== */
-.form-container {
-  background-color: #fafbff;
-  padding: 25px;
-  border: 1px solid #eef2f7;
-  border-radius: 8px;
-  margin-bottom: 30px;
-}
-.form-container h3 {
-  margin-top: 0;
-  text-align: center;
-}
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 15px;
-}
-.form-group {
-  margin-bottom: 15px;
-}
-input, select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-button[type="submit"] {
-  width: 100%;
-  padding: 12px 20px;
-  border: none;
-  background: var(--cor-primaria);
-  color: var(--cor-branco);
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-top: 10px;
-}
+/* --- Lista de Convidados (Desktop) --- */
+.guest-list { list-style: none; padding: 0; }
+.guest-group { background-color: #fdfdff; border: 1px solid #eef2f7; border-radius: 12px; margin-bottom: 15px; padding: 10px 20px; }
+.guest-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 5px; min-height: 40px; }
+.guest-row.familiar { margin-left: 30px; border-top: 1px dashed #eef2f7; }
+.guest-info { display: flex; align-items: center; gap: 12px; flex-grow: 1; }
+.guest-info label { font-weight: 500; cursor: pointer; }
+.guest-info label.confirmed { text-decoration: line-through; color: var(--cor-texto-secundario); }
+.guest-info input[type="checkbox"] { width: 18px; height: 18px; flex-shrink: 0; }
+.add-membro-form { display: flex; width: 100%; gap: 10px; padding: 0; margin-top: 5px; border: none; background: none; }
+.add-membro-form input { flex-grow: 1; border: 1px solid #ddd; border-radius: 6px; padding: 8px; }
+.add-membro-form button { padding: 8px 12px !important; margin-top: 0 !important; background: var(--cor-sucesso) !important; }
+.remove-btn { border-radius: 50%; border: none; background-color: #fff1f1; color: var(--cor-erro); cursor: pointer; width: 28px; height: 28px; }
 
-/* Estilos da Tabela de Gastos */
-.gastos-list table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-.gastos-list th, .gastos-list td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #eef2f7;
-}
-.gastos-list th {
-  font-weight: 600;
-  color: var(--cor-texto-secundario);
-}
+/* ===== 5. RESPONSIVIDADE (PARA CELULARES) ===== */
+@media (max-width: 950px) {
+  .App { padding: 10px 15px; }
+  .nav-links { display: none; }
+  .mobile-menu-toggle { display: block; background: transparent; border: none; font-size: 1.8rem; z-index: 1100; }
+  .nav-links.mobile-open { display: flex; flex-direction: column; position: absolute; top: 65px; left: 0; width: 100%; background: var(--cor-branco); box-shadow: var(--sombra-suave); }
+  .nav-links.mobile-open a { text-align: center; padding: 15px; width: 100%; border-bottom: 1px solid var(--cor-fundo); }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .dashboard-card-link:nth-child(1) { grid-column: span 1; }
 
-/* ===== 5. LISTAS (CONVIDADOS E CHECKLIST) ===== */
-.convidados-list ul, .checklist {
-  list-style-type: none;
-  padding: 0;
-}
-.grupo-familiar {
-  background-color: #fdfdff;
-  border: 1px solid #eef2f7;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  padding: 10px;
-}
-.linha-convidado, .checklist li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 5px;
-  width: 100%;
-}
-.linha-convidado.familiar {
-  margin-left: 30px;
-  padding-top: 10px;
-  border-top: 1px dashed #eef2f7;
-}
-.info-convidado, .checklist li > .editable-span {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-grow: 1;
-}
-.info-convidado label {
-  font-weight: 600;
-  cursor: pointer;
-}
-.info-convidado label.confirmado, .checklist li.concluido .editable-span {
-  text-decoration: line-through;
-  color: var(--cor-texto-secundario);
-}
-input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-}
-.remove-btn {
-  border-radius: 50%;
-  border: none;
-  background-color: #fff1f1;
-  color: var(--cor-erro);
-  font-weight: bold;
-  cursor: pointer;
-  width: 28px;
-  height: 28px;
-  line-height: 28px;
-  padding: 0;
-}
-
-/* ===== 6. RESPONSIVIDADE (PARA CELULARES) - VERSÃO ATUALIZADA ===== */
-
-/* Estilos para o botão hambúrguer (escondido no desktop) */
-.mobile-menu-toggle {
-  display: none;
-  font-size: 1.8rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 1100; /* Fica na frente do menu */
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-@media (max-width: 900px) { /* Ponto de quebra um pouco maior */
-  .App {
-    padding: 15px 20px;
-  }
-
-  /* Esconde os links no topo e mostra o botão hambúrguer */
-  .nav-links {
-    display: none;
-  }
-  .mobile-menu-toggle {
-    display: block;
-  }
-
-  /* Estilo do menu quando aberto no mobile */
-  .nav-links.mobile-open {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 75px; /* Posição abaixo da navbar */
-    left: 0;
-    width: 100%;
-    background-color: var(--cor-branco);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    padding: 10px 0;
-  }
-  .nav-links.mobile-open a {
-    text-align: center;
-    padding: 15px;
-    width: 100%;
-    border-bottom: 1px solid var(--cor-fundo);
-  }
-  .nav-links.mobile-open a:last-child {
-    border-bottom: none;
-  }
-
-  /* Tabela de Gastos Responsiva */
-  .gastos-list table, 
-  .gastos-list thead, 
-  .gastos-list tbody, 
-  .gastos-list th, 
-  .gastos-list td, 
-  .gastos-list tr {
-    display: block;
-  }
-  .gastos-list thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
-  }
-  .gastos-list tr {
-    border: 1px solid #ccc;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    padding: 10px;
-  }
-  .gastos-list td {
-    border: none;
-    position: relative;
-    padding-left: 50%;
-    text-align: right;
-  }
-  .gastos-list td:before {
-    content: attr(data-label);
-    position: absolute;
-    left: 10px;
-    width: 45%;
-    text-align: left;
-    font-weight: bold;
-  }
-}
-/* === ESTILOS FINAIS E CORRIGIDOS PARA PÁGINAS DE LISTA === */
-
-.summary-bar {
-  display: flex;
-  justify-content: space-around;
-  background-color: #f7f9fc;
-  padding: 20px;
-  border-radius: 12px;
-  margin: 20px 0;
-  font-size: 1.2rem;
-}
-
-.list-container {
-  margin-top: 30px;
-}
-
-.list-container h3 {
-    border-bottom: 2px solid var(--cor-fundo);
-    padding-bottom: 10px;
-}
-
-.guest-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-.guest-group {
-    background-color: #fdfdff;
-    border: 1px solid #eef2f7;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    padding: 10px 20px;
-}
-
-.guest-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
-    min-height: 40px;
-}
-
-.guest-row.familiar {
-    margin-left: 25px;
-    border-top: 1px dashed #eef2f7;
-}
-
-.guest-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-grow: 1; /* Faz o nome ocupar o espaço disponível */
-}
-
-.guest-info label {
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.guest-info label.confirmed {
-    text-decoration: line-through;
-    color: var(--cor-texto-secundario);
-}
-
-.guest-info input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-}
-
-.guest-actions {
-    display: flex;
-    align-items: center;
-}
-
-.add-member-form-container {
-    padding-top: 10px;
-    border-top: 1px dashed #eef2f7;
-}
-
-.add-membro-form {
-  display: flex;
-  width: 100%;
-  gap: 10px;
-  padding: 0;
-  margin: 0;
-  border: none;
-  background: none;
-}
-
-.add-membro-form input {
-  flex-grow: 1;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 8px;
-  font-size: 0.9rem;
-}
-
-.add-membro-form button {
-  padding: 8px 12px !important;
-  font-size: 1rem !important;
-  font-weight: bold;
-  margin-top: 0 !important;
-  background: var(--cor-sucesso) !important;
+  /* --- Transforma TODAS as tabelas em 'data-list' em cards --- */
+  .data-list table, .data-list thead, .data-list tbody, .data-list th, .data-list td, .data-list tr { display: block; }
+  .data-list thead tr { position: absolute; top: -9999px; left: -9999px; }
+  .data-list tr { border: 1px solid #ccc; margin-bottom: 15px; border-radius: 8px; padding: 10px; }
+  .data-list td { border: none; border-bottom: 1px solid #eee; position: relative; padding-left: 50%; text-align: right; display: flex; align-items: center; justify-content: flex-end; min-height: 40px; }
+  .data-list td:last-child { border-bottom: none; }
+  .data-list td:before { content: attr(data-label); position: absolute; left: 10px; width: 45%; text-align: left; font-weight: bold; color: var(--cor-texto-secundario); }
 }
