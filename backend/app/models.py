@@ -1,10 +1,11 @@
-# Arquivo: backend/app/models.py (Versão Final e Corrigida)
+# Arquivo: backend/app/models.py (Versão Final Corrigida)
 
 from app import db, bcrypt
 from datetime import datetime
-from flask_login import UserMixin
+# A linha "from flask_login import UserMixin" foi removida daqui
 
-class Usuario(db.Model, UserMixin):
+# A classe Usuario agora não herda mais de UserMixin
+class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome_completo = db.Column(db.String(150), nullable=False)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -13,13 +14,14 @@ class Usuario(db.Model, UserMixin):
     local_cha = db.Column(db.String(200), nullable=True)
     setup_completo = db.Column(db.Boolean, default=False, nullable=False)
 
+    # Relacionamentos
     bebes = db.relationship('Bebe', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     convidados = db.relationship('Convidado', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     gastos = db.relationship('Gasto', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     checklist_items = db.relationship('ChecklistItem', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     enxoval_items = db.relationship('EnxovalItem', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
     presentes = db.relationship('Presente', backref='organizador', lazy='dynamic', cascade="all, delete-orphan")
-    
+
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
