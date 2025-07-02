@@ -118,10 +118,10 @@ function ConvidadosPage() {
 
   if (loading) return <div>Carregando lista de convidados...</div>;
 
-  return (
-    <div className="convidados-container">
+return (
+    <div className="page-container">
       <h2>Lista de Convidados</h2>
-      <div className="orcamento-status">
+      <div className="summary-bar">
         <span>Pessoas na Lista: <strong>{totalPessoas}</strong></span>
         <span>Confirmados: <strong>{totalConfirmados}</strong></span>
       </div>
@@ -134,7 +134,7 @@ function ConvidadosPage() {
         </form>
       </div>
 
-      <div className="convidados-list">
+      <div className="list-container">
         <h3>Convidados</h3>
         <div className="filter-container">
           <input type="text" placeholder="Buscar por nome..." value={termoBusca} onChange={e => setTermoBusca(e.target.value)} />
@@ -143,27 +143,38 @@ function ConvidadosPage() {
         {convidados.length > 0 && convidadosFiltrados.length === 0 ? (
             <div className="empty-state"><h3>Nenhum convidado encontrado</h3><p>Tente ajustar os termos da sua busca.</p></div>
         ) : convidados.length === 0 ? (
-            <div className="empty-state"><h3>Sua Lista de Convidados está Vazia</h3><p>Use o formulário acima para começar a adicionar as pessoas especiais.</p></div>
+            <div className="empty-state"><h3>Sua Lista de Convidados está Vazia</h3><p>Use o formulário acima para começar.</p></div>
         ) : (
-          <ul>
+          <ul className="guest-list">
             {convidadosFiltrados.map(grupo => (
-              <li key={grupo.id}>
-                <div className="convidado-item principal">
-                  <input type="checkbox" id={`convidado-${grupo.id}`} checked={!!grupo.confirmado} onChange={() => handleToggleConfirmacao(grupo.id, grupo.confirmado)} />
-                  <label htmlFor={`convidado-${grupo.id}`} className={grupo.confirmado ? 'confirmado' : ''}>{grupo.nome}</label>
-                  <div className="convidado-actions">
-                    <button onClick={() => handleRemover(grupo.id)} className="remove-btn mini" title="Remover grupo familiar">×</button>
+              <li key={grupo.id} className="guest-group">
+                {/* --- Linha do Convidado Principal --- */}
+                <div className="guest-row">
+                  <div className="guest-info">
+                    <input type="checkbox" checked={!!grupo.confirmado} onChange={() => handleToggleConfirmacao(grupo.id, grupo.confirmado)} id={`convidado-${grupo.id}`} />
+                    <label htmlFor={`convidado-${grupo.id}`} className={grupo.confirmado ? 'confirmed' : ''}>{grupo.nome}</label>
+                  </div>
+                  <div className="guest-actions">
+                    <button onClick={() => handleRemover(grupo.id)} className="remove-btn" title="Remover grupo familiar">×</button>
                   </div>
                 </div>
+
+                {/* --- Lista de Familiares --- */}
                 {grupo.familia.map(familiar => (
-                  <div key={familiar.id} className="convidado-item familiar">
-                    <input type="checkbox" id={`convidado-${familiar.id}`} checked={!!familiar.confirmado} onChange={() => handleToggleConfirmacao(familiar.id, familiar.confirmado)} />
-                    <label htmlFor={`convidado-${familiar.id}`} className={familiar.confirmado ? 'confirmado' : ''}>{familiar.nome}</label>
-                    <button onClick={() => handleRemover(familiar.id)} className="remove-btn mini" title={`Remover ${familiar.nome}`}>×</button>
+                  <div key={familiar.id} className="guest-row familiar">
+                    <div className="guest-info">
+                      <input type="checkbox" checked={!!familiar.confirmado} onChange={() => handleToggleConfirmacao(familiar.id, familiar.confirmado)} id={`convidado-${familiar.id}`} />
+                      <label htmlFor={`convidado-${familiar.id}`} className={familiar.confirmado ? 'confirmed' : ''}>{familiar.nome}</label>
+                    </div>
+                    <div className="guest-actions">
+                      <button onClick={() => handleRemover(familiar.id)} className="remove-btn" title={`Remover ${familiar.nome}`}>×</button>
+                    </div>
                   </div>
                 ))}
-                <div className="familiar">
-                  <AddMembroForm grupoId={grupo.id} onAdd={handleAddMembro} />
+
+                {/* --- Formulário para adicionar novo familiar --- */}
+                <div className="guest-row familiar add-member-form-container">
+                   <AddMembroForm grupoId={grupo.id} onAdd={handleAddMembro} />
                 </div>
               </li>
             ))}
@@ -172,5 +183,4 @@ function ConvidadosPage() {
       </div>
     </div>
   );
-}
 export default ConvidadosPage;
