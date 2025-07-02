@@ -33,7 +33,6 @@ function ConvidadosPage() {
   const [novoConvidadoNome, setNovoConvidadoNome] = useState('');
   const [termoBusca, setTermoBusca] = useState('');
 
-  // Função para buscar os dados, garantindo que o 'loading' seja desativado
   const fetchConvidados = () => {
     apiClient.get('/convidados')
       .then(response => {
@@ -44,7 +43,7 @@ function ConvidadosPage() {
         toast.error("Não foi possível carregar a lista de convidados.");
       })
       .finally(() => {
-        setLoading(false); // Esta linha é crucial
+        setLoading(false);
       });
   };
 
@@ -73,31 +72,48 @@ function ConvidadosPage() {
 
   const handleToggleConfirmacao = async (convidadoId, statusAtual) => {
     const originalConvidados = [...convidados];
-    // Atualização otimista na tela
     setConvidados(prevConvidados => prevConvidados.map(grupo => {
-        if (grupo.id === convidadoId) return { ...grupo, confirmado: !statusAtual };
-        return {
-            ...grupo,
-            familia: grupo.familia.map(familiar => 
-                familiar.id === convidadoId ? { ...familiar, confirmado: !statusAtual } : familiar
-            )
-        };
+        let grupoAtualizado = { ...grupo };
+        if (grupo.id === convidadoId) {
+          grupoAtualizado.confirmado = !statusAtual;
+        }
+        grupoAtualizado.familia = grupo.familia.map(familiar => {
+          if (familiar.id === convidadoId) {
+            return { ...familiar, confirmado: !statusAtual };
+          }
+          return familiar;
+        });
+        return grupoAtualizado;
     }));
     try {
       await apiClient.put(`/convidados/${convidadoId}/confirmar`, { confirmado: !statusAtual });
     } catch (error) {
       toast.error("Erro ao atualizar status.");
-      setConvidados(originalConvidados); // Reverte se der erro
+      setConvidados(originalConvidados);
     }
   };
 
   const handleRemover = async (convidadoId) => {
-    if (window.confirm("Tem certeza? Esta ação removerá o convidado. Se for o principal, a família inteira será removida.")) {
+    const convidadoParaRemover = convidados.flatMap(g => [g, ...g.familia]).find(c => c.id === convidadoId);
+    if (!convidadoParaRemover) return;
+    
+    if (window.confirm(`Tem certeza que deseja remover "${convidadoParaRemover.nome}"? ${!convidadoParaRemover.convidado_principal_id ? 'Toda a família será removida.' : ''}`)) {
+      const originalConvidados = [...convidados];
+      // Atualização otimista na tela
+      setConvidados(prev => prev.map(g => ({
+        ...g,
+        familia: g.familia.filter(f => f.id !== convidadoId)
+      })).filter(g => g.id !== convidadoId));
+
       try {
         await apiClient.delete(`/convidados/${convidadoId}`);
         toast.success("Removido com sucesso.");
+        // Se a remoção otimista deu certo, podemos chamar fetchConvidados para garantir consistência total
         fetchConvidados();
-      } catch (error) { toast.error("Não foi possível remover."); }
+      } catch (error) { 
+        toast.error("Não foi possível remover.");
+        setConvidados(originalConvidados); // Reverte se der erro
+      }
     }
   };
 
@@ -118,7 +134,7 @@ function ConvidadosPage() {
 
   if (loading) return <div>Carregando lista de convidados...</div>;
 
-return (
+  return (
     <div className="page-container">
       <h2>Lista de Convidados</h2>
       <div className="summary-bar">
@@ -134,7 +150,7 @@ return (
         </form>
       </div>
 
-      <div className="list-container">
+      <div className="data-list">
         <h3>Convidados</h3>
         <div className="filter-container">
           <input type="text" placeholder="Buscar por nome..." value={termoBusca} onChange={e => setTermoBusca(e.target.value)} />
@@ -148,7 +164,6 @@ return (
           <ul className="guest-list">
             {convidadosFiltrados.map(grupo => (
               <li key={grupo.id} className="guest-group">
-                {/* --- Linha do Convidado Principal --- */}
                 <div className="guest-row">
                   <div className="guest-info">
                     <input type="checkbox" checked={!!grupo.confirmado} onChange={() => handleToggleConfirmacao(grupo.id, grupo.confirmado)} id={`convidado-${grupo.id}`} />
@@ -159,7 +174,6 @@ return (
                   </div>
                 </div>
 
-                {/* --- Lista de Familiares --- */}
                 {grupo.familia.map(familiar => (
                   <div key={familiar.id} className="guest-row familiar">
                     <div className="guest-info">
@@ -172,7 +186,6 @@ return (
                   </div>
                 ))}
 
-                {/* --- Formulário para adicionar novo familiar --- */}
                 <div className="guest-row familiar add-member-form-container">
                    <AddMembroForm grupoId={grupo.id} onAdd={handleAddMembro} />
                 </div>
@@ -183,4 +196,6 @@ return (
       </div>
     </div>
   );
+}
+
 export default ConvidadosPage;

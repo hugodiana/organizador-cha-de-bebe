@@ -12,12 +12,12 @@ function GastosPage() {
   const [fornecedor, setFornecedor] = useState('');
   const [valor, setValor] = useState('');
   const [metodoPagamento, setMetodoPagamento] = useState('Pix');
-  const [categoria, setCategoria] = useState('Outros'); // <-- NOVO ESTADO PARA CATEGORIA
+  const [categoria, setCategoria] = useState('Outros');
 
   // Estados para os filtros
   const [termoBusca, setTermoBusca] = useState('');
   const [filtroPagamento, setFiltroPagamento] = useState('Todos');
-  const [filtroCategoria, setFiltroCategoria] = useState('Todas'); // <-- NOVO ESTADO PARA FILTRO DE CATEGORIA
+  const [filtroCategoria, setFiltroCategoria] = useState('Todas');
 
   useEffect(() => {
     apiClient.get('/gastos')
@@ -33,11 +33,12 @@ function GastosPage() {
 
   const handleAddGasto = async (e) => {
     e.preventDefault();
+    // --- CORREÇÃO DA VALIDAÇÃO ESTÁ AQUI ---
     if (!descricao.trim() || !valor.trim()) {
       toast.error("Por favor, preencha a descrição e o valor.");
       return;
     }
-    // Adiciona a categoria ao objeto enviado para a API
+    
     const novoGasto = { descricao, fornecedor, valor: parseFloat(valor), metodo_pagamento: metodoPagamento, categoria };
     
     setIsSubmitting(true);
@@ -75,15 +76,15 @@ function GastosPage() {
 
   const gastosFiltrados = useMemo(() => {
     return gastos
-      .filter(gasto => { // Filtro de Categoria
+      .filter(gasto => {
         if (filtroCategoria !== 'Todas') return gasto.categoria === filtroCategoria;
         return true;
       })
-      .filter(gasto => { // Filtro de Pagamento
+      .filter(gasto => {
         if (filtroPagamento !== 'Todos') return gasto.metodo_pagamento === filtroPagamento;
         return true;
       })
-      .filter(gasto => { // Filtro de Busca por texto
+      .filter(gasto => {
         const busca = termoBusca.toLowerCase();
         return (
           gasto.descricao.toLowerCase().includes(busca) ||
@@ -97,71 +98,61 @@ function GastosPage() {
   const totalGastoFiltrado = gastosFiltrados.reduce((acc, gasto) => acc + gasto.valor, 0);
 
   return (
-    <div className="gastos-container">
+    <div className="page-container">
       <h2>Gestão de Gastos</h2>
-      <div className="orcamento-status">
+      <div className="summary-bar">
         Total Exibido: <strong>R$ {totalGastoFiltrado.toFixed(2)}</strong>
       </div>
       
       <div className="form-container">
         <h3>Adicionar Novo Gasto</h3>
         <form onSubmit={handleAddGasto}>
-    <div className="form-group full-width">
-      <label htmlFor="descricao">Descrição</label>
-      <input id="descricao" type="text" value={descricao} onChange={e => setDescricao(e.target.value)} placeholder="Ex: Bolo e doces" required />
-    </div>
-    <div className="form-group full-width">
-      <label htmlFor="fornecedor">Fornecedor (Opcional)</label>
-      <input id="fornecedor" type="text" value={fornecedor} onChange={e => setFornecedor(e.target.value)} placeholder="Ex: Doce Sabor" />
-    </div>
+          <div className="form-group full-width">
+            <label htmlFor="descricao">Descrição</label>
+            <input id="descricao" type="text" value={descricao} onChange={e => setDescricao(e.target.value)} placeholder="Ex: Bolo e doces" required />
+          </div>
+          <div className="form-group full-width">
+            <label htmlFor="fornecedor">Fornecedor (Opcional)</label>
+            <input id="fornecedor" type="text" value={fornecedor} onChange={e => setFornecedor(e.target.value)} placeholder="Ex: Doce Sabor" />
+          </div>
 
-    {/* Esta grade vai organizar os próximos campos em colunas */}
-    <div className="form-grid">
-      <div className="form-group">
-        <label htmlFor="valor">Valor (R$)</label>
-        <input id="valor" type="number" value={valor} onChange={e => setValor(e.target.value)} placeholder="450,00" step="0.01" required />
+          <div className="form-grid">
+            <div className="form-group">
+              <label htmlFor="valor">Valor (R$)</label>
+              <input id="valor" type="number" value={valor} onChange={e => setValor(e.target.value)} placeholder="450.00" step="0.01" required />
+            </div>
+            <div className="form-group">
+              <label htmlFor="metodoPagamento">Método de Pagamento</label>
+              <select id="metodoPagamento" value={metodoPagamento} onChange={e => setMetodoPagamento(e.target.value)}>
+                <option>Pix</option>
+                <option>Cartão de Crédito</option>
+                <option>Débito</option>
+                <option>Dinheiro</option>
+                <option>Outro</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="categoria">Categoria</label>
+              <select id="categoria" value={categoria} onChange={e => setCategoria(e.target.value)}>
+                <option>Outros</option>
+                <option>Decoração</option>
+                <option>Buffet/Comida</option>
+                <option>Lembrancinhas</option>
+                <option>Local</option>
+                <option>Bebidas</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Adicionando...' : 'Adicionar Gasto'}
+          </button>
+        </form>
       </div>
 
-      <div className="form-group">
-        <label htmlFor="metodoPagamento">Método de Pagamento</label>
-        <select id="metodoPagamento" value={metodoPagamento} onChange={e => setMetodoPagamento(e.target.value)}>
-          <option>Pix</option>
-          <option>Cartão de Crédito</option>
-          <option>Débito</option>
-          <option>Dinheiro</option>
-          <option>Outro</option>
-        </select>
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="categoria">Categoria</label>
-        <select id="categoria" value={categoria} onChange={e => setCategoria(e.target.value)}>
-          <option>Outros</option>
-          <option>Decoração</option>
-          <option>Buffet/Comida</option>
-          <option>Lembrancinhas</option>
-          <option>Local</option>
-          <option>Bebidas</option>
-        </select>
-      </div>
-    </div>
-
-    <button type="submit" disabled={isSubmitting}>
-      {isSubmitting ? 'Adicionando...' : 'Adicionar Gasto'}
-    </button>
-  </form>
-</div>
-
-      <div className="gastos-list">
+      <div className="data-list">
         <h3>Histórico de Gastos</h3>
         <div className="filter-container">
-          <input 
-            type="text"
-            placeholder="Buscar por descrição ou fornecedor..."
-            value={termoBusca}
-            onChange={e => setTermoBusca(e.target.value)}
-          />
-          {/* FILTRO DE CATEGORIA ADICIONADO */}
+          <input type="text" placeholder="Buscar por descrição ou fornecedor..." value={termoBusca} onChange={e => setTermoBusca(e.target.value)} />
           <select value={filtroCategoria} onChange={e => setFiltroCategoria(e.target.value)}>
             <option value="Todas">Todas as Categorias</option>
             <option>Outros</option>
@@ -197,7 +188,7 @@ function GastosPage() {
               <tr>
                 <th>Descrição</th>
                 <th>Fornecedor</th>
-                <th>Categoria</th> {/* COLUNA DE CATEGORIA ADICIONADA */}
+                <th>Categoria</th>
                 <th>Valor</th>
                 <th>Pagamento</th>
                 <th>Ação</th>
@@ -206,16 +197,15 @@ function GastosPage() {
             <tbody>
               {gastosFiltrados.map(gasto => (
                 <tr key={gasto.id}>
-                  {/* Adicionamos o 'data-label' em cada td */}
                   <td data-label="Descrição">{gasto.descricao}</td>
                   <td data-label="Fornecedor">{gasto.fornecedor}</td>
                   <td data-label="Categoria">{gasto.categoria}</td>
                   <td data-label="Valor">R$ {gasto.valor.toFixed(2)}</td>
                   <td data-label="Pagamento">{gasto.metodo_pagamento}</td>
                   <td data-label="Ação"><button className="remove-btn" onClick={() => handleDeleteGasto(gasto.id)}>×</button></td>
-              </tr>
-            ))}
-          </tbody>
+                </tr>
+              ))}
+            </tbody>
           </table>
         )}
       </div>

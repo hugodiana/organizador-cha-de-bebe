@@ -77,13 +77,12 @@ function ChecklistPage() {
   const totalTarefas = items.length;
 
   return (
-    <div className="checklist-container">
+    <div className="page-container">
       <h2>Checklist de Organização</h2>
-      <div className="orcamento-status">
+      <div className="summary-bar">
         Progresso: <strong>{tarefasConcluidas} de {totalTarefas} tarefas concluídas</strong>
       </div>
 
-      {/* --- FORMULÁRIO QUE FALTAVA --- */}
       <div className="form-container">
         <h3>Adicionar Nova Tarefa</h3>
         <form onSubmit={handleAdicionar}>
@@ -99,26 +98,28 @@ function ChecklistPage() {
           </button>
         </form>
       </div>
-
-      {items.length > 0 ? (
-        <ul className="checklist">
-          {items.map(item => (
-            <li key={item.id} className={item.concluido ? 'concluido' : ''}>
-              <input type="checkbox" checked={item.concluido} onChange={() => handleMarcar(item.id, item.concluido)} />
-              <EditableText 
-                initialValue={item.tarefa} 
-                onSave={(novoTexto) => handleUpdateTarefa(item.id, novoTexto)} 
-              />
-              <button onClick={() => handleRemover(item.id)} className="remove-btn">×</button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div className="empty-state">
-          <h3>Seu Checklist está Vazio</h3>
-          <p>Adicione sua primeira tarefa para começar a se organizar.</p>
-        </div>
-      )}
+      
+      <div className="data-list">
+        {items.length > 0 ? (
+          <ul className="checklist">
+            {items.map(item => (
+              <li key={item.id} className={item.concluido ? 'concluido' : ''}>
+                <input type="checkbox" checked={item.concluido} onChange={() => handleMarcar(item.id, item.concluido)} />
+                <EditableText 
+                  initialValue={item.tarefa} 
+                  onSave={(novoTexto) => handleUpdateTarefa(item.id, novoTexto)} 
+                />
+                <button onClick={() => handleRemover(item.id)} className="remove-btn">×</button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="empty-state">
+            <h3>Seu Checklist está Vazio</h3>
+            <p>Adicione sua primeira tarefa para começar a se organizar.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
